@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,11 @@ namespace GitInsight
 {
     internal interface IGitRepoInsight
     {
-        string GetCommitsOverTime();
-        string GetCommitsOverTimeByUser(string user);
+        string GetCommitsOverTimeFormatted();
+        string GetCommitsOverTimeByUserFormatted(string user);
+
+        IOrderedEnumerable<(DateTimeOffset, int)> GetCommitsOverTime();
+
+        IOrderedEnumerable<(DateTimeOffset, int)> GetCommitsOverTimeByUser(string user);
     }
 }
