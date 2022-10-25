@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitInsight", "GitInsight\GitInsight.csproj", "{A0FDB64B-8528-4B88-BD1D-6E29FC4F4E6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight", "GitInsight\GitInsight.csproj", "{A0FDB64B-8528-4B88-BD1D-6E29FC4F4E6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitInsight.Tests", "GitInsight.Tests\GitInsight.Tests.csproj", "{C3E7B839-4093-45B8-9A25-2EEB351266F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A0FDB64B-8528-4B88-BD1D-6E29FC4F4E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0FDB64B-8528-4B88-BD1D-6E29FC4F4E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0FDB64B-8528-4B88-BD1D-6E29FC4F4E6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3E7B839-4093-45B8-9A25-2EEB351266F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3E7B839-4093-45B8-9A25-2EEB351266F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3E7B839-4093-45B8-9A25-2EEB351266F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3E7B839-4093-45B8-9A25-2EEB351266F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
