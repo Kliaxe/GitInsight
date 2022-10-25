@@ -10,10 +10,10 @@ namespace GitInsight
     internal interface IGitRepoInsight
     {
         string GetCommitsOverTimeFormatted();
-        string GetCommitsOverTimeByUserFormatted(string user);
+        string GetCommitsOverTimeByUserFormatted();
 
-        IOrderedEnumerable<(DateTimeOffset, int)> GetCommitsOverTime();
+        IOrderedEnumerable<DateCount> GetCommitsOverTime();
 
-        IOrderedEnumerable<(DateTimeOffset, int)> GetCommitsOverTimeByUser(string user);
+        Dictionary<string, IOrderedEnumerable<DateCount>> GetCommitsOverTimeByUser();
     }
 }
