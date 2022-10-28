@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GitInsight
 {
-    internal interface IGitRepoInsight
+    public interface IGitRepoInsight
     {
         string GetCommitsOverTimeFormatted();
         string GetCommitsOverTimeByUserFormatted();
@@ -16,4 +16,6 @@ namespace GitInsight
 
         Dictionary<string, IOrderedEnumerable<DateCount>> GetCommitsOverTimeByUser();
     }
+
+    public record DateCount(DateTimeOffset Date, int Count);
 }
