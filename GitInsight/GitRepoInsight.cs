@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using System.Text;
 
 namespace GitInsight;
 
@@ -26,11 +27,19 @@ public class GitRepoInsight : IGitRepoInsight
 
     public string GetCommitsOverTimeByUserFormatted()
     {
-        throw new NotImplementedException();
+        return GetCommitsOverTimeByUser().Select(pair => pair.Key + "\n" + FormatDateCount(pair.Value)).Aggregate((s1, s2) => s1 + "\n\n" + s2);
+        /*StringBuilder sb = new();
+        GetCommitsOverTimeByUser().ToList().ForEach(d => sb.Append(d.Key).Append("\n").Append(d.Value.Select(dc => sb.Append(dc.Count + " " + dc.Date + "\n"))));
+        return sb.ToString();  */      
     }
 
     public string GetCommitsOverTimeFormatted()
     {
-        throw new NotImplementedException();
+        return FormatDateCount(GetCommitsOverTime());
+    }
+
+    private string FormatDateCount(IEnumerable<DateCount> dateCounts)
+    {
+        return dateCounts.Select(dc => $"{dc.Count} {dc.Date.Date}").Aggregate((s1, s2) => s1 + "\n" + s2);
     }
 }
