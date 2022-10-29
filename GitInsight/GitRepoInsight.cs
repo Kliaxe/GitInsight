@@ -22,7 +22,7 @@ public class GitRepoInsight : IGitRepoInsight
 
     private IOrderedEnumerable<DateCount> FormatCommits(IEnumerable<Commit> commits)
     {
-        return commits.GroupBy(c => c.Author.When).Select(g => new DateCount(g.Key, g.Count())).OrderBy(t => t.Date);
+        return commits.GroupBy(c => c.Author.When.Date).Select(g => new DateCount(g.Key, g.Count())).OrderBy(t => t.Date);
     }
 
     public string GetCommitsOverTimeByUserFormatted()
