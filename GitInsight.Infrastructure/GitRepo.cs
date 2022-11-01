@@ -9,8 +9,10 @@ namespace GitInsight.Infrastructure
     internal class GitRepo
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public DateTimeOffset Version { get; set; }
+
+        public ICollection<UserDateCount> UserDateCount { get; set; }
     }
 }

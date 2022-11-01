@@ -9,6 +9,6 @@ namespace GitInsight.Infrastructure
         public string UserName { get; set; }
         public DateTime Date { get; set; }
         public int Count { get; set; }
-        public int GitId { get; set; }
+        public int GitRepoId { get; set; }
     }
 }
