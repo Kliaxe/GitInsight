@@ -53,14 +53,14 @@ public class GitRepoTests
     [Fact]
     public void GetCommitsOverTimeByUser()
     {
-        var expected = new Dictionary<string, IOrderedEnumerable<DateCount>>()
+        var expected = new Dictionary<string, IEnumerable<DateCount>>()
         {
             {
                 "Lukas",
                 new List<DateCount>()
                 {
                     new DateCount(DateTimeOffset.Now.Date, 2),
-                }.OrderBy(dc => dc.Date)
+                }
             },
             {
                 "Adrian",
@@ -68,24 +68,10 @@ public class GitRepoTests
                 {
                     new DateCount(DateTimeOffset.Now.Date, 3),
                     new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
-                }.OrderBy(dc => dc.Date)
+                }
             },
         };
 
         Assert.Equal(expected, repoInsight.GetCommitsOverTimeByUser());
-    }
-
-    [Fact]
-    public void GetCommitsOverTimeFormatted()
-    {
-        string expected = $"5 {DateTimeOffset.Now.Date}\n1 {DateTimeOffset.Now.AddDays(1).Date}";
-        Assert.Equal(expected, repoInsight.GetCommitsOverTimeFormatted());
-    }
-
-    [Fact]
-    public void GetCommitsOverTimeByUserFormatted()
-    {
-        string expected = $"Adrian\n3 {DateTimeOffset.Now.Date}\n1 {DateTimeOffset.Now.AddDays(1).Date}\n\nLukas\n2 {DateTimeOffset.Now.Date}";
-        Assert.Equal(expected, repoInsight.GetCommitsOverTimeByUserFormatted());
     }
 }
