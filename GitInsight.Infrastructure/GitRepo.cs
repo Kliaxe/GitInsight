@@ -13,6 +13,6 @@ namespace GitInsight.Infrastructure
 
         public DateTimeOffset Version { get; set; }
 
-        public ICollection<UserDateCount> UserDateCount { get; set; }
+        public ICollection<UserDateCount> UserDateCounts { get; set; }
     }
 }
