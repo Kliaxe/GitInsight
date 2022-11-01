@@ -9,6 +9,7 @@ public class GitRepoInsight : IGitRepoInsight
     public GitRepoInsight(IRepository repo)
     {
         this.repo = repo;
+        repo.Index
     }
 
     public IOrderedEnumerable<DateCount> GetCommitsOverTime()
