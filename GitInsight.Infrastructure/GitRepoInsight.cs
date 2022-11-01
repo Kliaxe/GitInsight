@@ -1,7 +1,7 @@
 ﻿using LibGit2Sharp;
 using System.Text;
 
-namespace GitInsight;
+namespace GitInsight.Infrastructure;
 
 public class GitRepoInsight : IGitRepoInsight
 {
