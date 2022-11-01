@@ -9,12 +9,9 @@ namespace GitInsight
 {
     public interface IGitRepoInsight
     {
-        string GetCommitsOverTimeFormatted();
-        string GetCommitsOverTimeByUserFormatted();
+        IEnumerable<DateCount> GetCommitsOverTime();
 
-        IOrderedEnumerable<DateCount> GetCommitsOverTime();
-
-        Dictionary<string, IOrderedEnumerable<DateCount>> GetCommitsOverTimeByUser();
+        Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser();
     }
 
     public record DateCount(DateTimeOffset Date, int Count);
