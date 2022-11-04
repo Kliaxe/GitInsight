@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    public interface IAnalysisRepository
+    public interface IGitInsightRepository
     {
-        bool HasUpToDateAnalysis(IRepository repo);
+        bool HasUpToDateGitInsight(IRepository repo);
 
-        void UpdateAnalysis(GitRepoInsight gitRepoInsight);
+        void UpdateGitInsight(GitRepoInsight gitRepoInsight);
     }
 }
