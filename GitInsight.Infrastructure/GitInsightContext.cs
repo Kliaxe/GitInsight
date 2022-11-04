@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GitInsight.Infrastructure
 {
-    internal class GitInsightContext : DbContext
+    public class GitInsightContext : DbContext
     {
         public DbSet<GitRepo> Repositories => Set<GitRepo>();
         public DbSet<UserDateCount> UserDateCounts => Set<UserDateCount>();
