@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    internal class DBRepoInsight : IGitRepoInsight
+    public class DBRepoInsight : IGitRepoInsight
     {
-        private readonly GitInsightContext context;
-        public DBRepoInsight(GitInsightContext ctx)
+        private readonly GitInsightContext _context;
+        public DBRepoInsight(GitInsightContext context)
         {
-            context = ctx;
+            _context = context;
         }
 
-        public IEnumerable<DateCount> GetCommitsOverTime()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<DateCount> GetCommitsOverTime() => FormatUserDateCounts(_context.UserDateCounts);
 
         public Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser()
-        {
-            throw new NotImplementedException();
-        }
+            => _context.UserDateCounts.GroupBy(u => u.UserName).ToDictionary(g => g.Key, g => FormatUserDateCounts(g));
+        
+
+        private IEnumerable<DateCount> FormatUserDateCounts(IEnumerable<UserDateCount> userDateCounts)
+            => userDateCounts.GroupBy(u => u.Date).Select(g => new DateCount(g.Key, g.Count())).OrderBy(t => t.Date);
+        
     }
 }
