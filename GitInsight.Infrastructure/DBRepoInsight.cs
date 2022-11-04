@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    internal class DBRepoInsight : IGitRepoInsight
+    public class DBRepoInsight : IGitRepoInsight
     {
         private readonly GitInsightContext context;
         public DBRepoInsight(GitInsightContext ctx)

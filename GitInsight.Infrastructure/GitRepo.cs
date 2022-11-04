@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    internal class GitRepo
+    public class GitRepo
     {
         public int Id { get; set; }
         public string Name { get; set; }
