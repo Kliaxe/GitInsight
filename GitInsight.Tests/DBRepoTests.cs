@@ -35,9 +35,9 @@ namespace GitInsight.Tests
             };
             context.Repositories.AddRange(testRepo1, testRepo2);
             UserDateCount adrianUserCountDate1 = new() { Email = "adrian@kari.dk", Date = DateTime.Now.Date, UserName = "AdrianStein-cloud", Count = 2, GitRepoId = 1 };
-            UserDateCount adrianUserCountDate2 = new() { Email = "adrian@kari.dk", Date = DateTime.Now.Date, UserName = "AdrianStein-cloud", Count = 5, GitRepoId = 2 };
-            UserDateCount darlingUserCountDate1 = new() { Email = "mathi-2721@outlook.dk", Date = DateTime.Now.Date, UserName = "FisseDarling", Count = 6, GitRepoId = 1 };
-            UserDateCount andréUserCountDate1 = new() { Email = "dinmor@gmail.com", Date = DateTime.Now.Date, UserName = "André", Count = 7, GitRepoId = 2 };
+            UserDateCount adrianUserCountDate2 = new() { Email = "adrian@kari.dk", Date = DateTime.Now.Date.AddDays(1), UserName = "AdrianStein-cloud", Count = 5, GitRepoId = 2 };
+            UserDateCount darlingUserCountDate1 = new() { Email = "mathi-2721@outlook.dk", Date = DateTime.Now.Date.AddDays(2), UserName = "FisseDarling", Count = 6, GitRepoId = 1 };
+            UserDateCount andréUserCountDate1 = new() { Email = "dinmor@gmail.com", Date = DateTime.Now.Date.AddDays(3), UserName = "André", Count = 7, GitRepoId = 2 };
             context.UserDateCounts.AddRange(adrianUserCountDate1, adrianUserCountDate2, darlingUserCountDate1, andréUserCountDate1);
             context.SaveChanges();
 
@@ -51,6 +51,13 @@ namespace GitInsight.Tests
             var commits = _repository.GetCommitsOverTime();
 
             List<DateCount> expected = new List<DateCount>();
+
+            DateCount adrianUserCountDate1 = new(DateTime.Now.Date, );
+            DateCount adrianUserCountDate2 = new();
+            DateCount darlingUserCountDate1 = new();
+            DateCount andréUserCountDate1 = new();
+            
+            expected.AddRange(adrianUserCountDate1, adrianUserCountDate2, darlingUserCountDate1, andréUserCountDate1);
 
             Assert.Equal(expected, commits);
         }
