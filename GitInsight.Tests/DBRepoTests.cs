@@ -47,7 +47,7 @@ namespace GitInsight.Tests
         }
 
         [Fact]
-        public void Testing_Commits_Over_Time()
+        public void Commits_Over_Time_Returns_Commits_Over_Time()
         {
             var commits = _repository.GetCommitsOverTime();
 
@@ -62,7 +62,7 @@ namespace GitInsight.Tests
         }
 
         [Fact]
-        public void Testing_Commits_Over_Time_By_User()
+        public void Commits_Over_Time_By_User_Return_Commits_Over_Time_By_User()
         {
             var commits = _repository.GetCommitsOverTimeByUser();
 
