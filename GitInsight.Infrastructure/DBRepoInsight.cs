@@ -22,7 +22,7 @@ namespace GitInsight.Infrastructure
         
 
         private IEnumerable<DateCount> FormatUserDateCounts(IEnumerable<UserDateCount> userDateCounts)
-            => userDateCounts.GroupBy(u => u.Date).Select(g => new DateCount(g.Key, g.Count())).OrderBy(t => t.Date);
+            => userDateCounts.Select(g => new DateCount(g.Date, g.Count)).OrderBy(t => t.Date);
         
     }
 }
