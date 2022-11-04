@@ -4,7 +4,7 @@ namespace GitInsight.Infrastructure
 {
     public class UserDateCount
     {
-        [EmailAddress]
+        public int Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
         public DateTime Date { get; set; }

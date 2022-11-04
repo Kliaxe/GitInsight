@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using System.Linq;
 
 namespace GitInsight;
 

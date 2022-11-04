@@ -1,5 +1,6 @@
 ﻿using LibGit2Sharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,13 @@ namespace GitInsight.Infrastructure
 
         public IEnumerable<DateCount> GetCommitsOverTime()
         {
-            throw new NotImplementedException();
+            return context.UserDateCounts.GroupBy(c => c.Date.Date).Select(g => new DateCount(g.Key, g.Sum(u => u.Count)));
         }
 
         public Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser()
         {
-            throw new NotImplementedException();
+            return context.UserDateCounts.GroupBy(c => new { c.Email, c.UserName })
+                .ToDictionary(g => g.Key.UserName, g => g.Select(u => new DateCount(u.Date.Date, u.Count)));
         }
     }
 }
