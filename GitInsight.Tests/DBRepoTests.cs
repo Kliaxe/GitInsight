@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using FluentAssertions;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -46,22 +47,33 @@ namespace GitInsight.Tests
         }
 
         [Fact]
-        public void Test_test_test()
+        public void Commits_Over_Time_Returns_Commits_Over_Time()
         {
             var commits = _repository.GetCommitsOverTime();
 
-            List<DateCount> expected = new List<DateCount>();
+            List<DateCount> expected = new() {
+            new(DateTime.Now.Date, 2),
+            new(DateTime.Now.Date.AddDays(2), 6),
+            new(DateTime.Now.Date.AddDays(1), 5),
+            new(DateTime.Now.Date.AddDays(3), 7)
+            };
 
-            DateCount adrianUserCountDate1 = new(DateTime.Now.Date, );
-            DateCount adrianUserCountDate2 = new();
-            DateCount darlingUserCountDate1 = new();
-            DateCount andréUserCountDate1 = new();
-            
-            expected.AddRange(adrianUserCountDate1, adrianUserCountDate2, darlingUserCountDate1, andréUserCountDate1);
-
-            Assert.Equal(expected, commits);
+            commits.Should().BeEquivalentTo(expected);
         }
 
+        [Fact]
+        public void Commits_Over_Time_By_User_Return_Commits_Over_Time_By_User()
+        {
+            var commits = _repository.GetCommitsOverTimeByUser();
+
+            Dictionary<String, List<DateCount>> expected = new();
+
+            expected.Add("AdrianStein-cloud", new List<DateCount>() { new(DateTime.Now.Date, 2), new(DateTime.Now.Date.AddDays(2), 6)});
+            expected.Add("FisseDarling", new List<DateCount>() { new(DateTime.Now.Date.AddDays(1), 5) });
+            expected.Add("André", new List<DateCount>() { new(DateTime.Now.Date.AddDays(3), 7) });
+
+            commits.Should().BeEquivalentTo(expected);
+        }
 
     }
 }
