@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    public class GitInsightRepository : IGitInsightRepository
+    public class InsightRepository : IInsightRepository
     {
         private GitInsightContext _context;
 
-        public GitInsightRepository(GitInsightContext context)
+        public InsightRepository(GitInsightContext context)
         {
             _context = context;
         }
 
-        public bool HasUpToDateGitInsight(IRepository repo)
+        public bool HasUpToDateInsight(IRepository repo)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateGitInsight(GitRepoInsight gitRepoInsight)
+        public void UpdateInsight(GitRepoInsight gitRepoInsight)
         {
             throw new NotImplementedException();
         }

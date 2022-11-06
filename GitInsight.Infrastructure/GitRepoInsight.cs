@@ -6,6 +6,7 @@ namespace GitInsight.Infrastructure;
 public class GitRepoInsight : IGitRepoInsight
 {
     private readonly IRepository repo;
+
     public GitRepoInsight(IRepository repo)
     {
         this.repo = repo;
