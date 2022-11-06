@@ -9,11 +9,11 @@ namespace GitInsight.Infrastructure
 {
     public class GitInsightRepository : IGitInsightRepository
     {
-        private GitInsightContext context;
+        private GitInsightContext _context;
 
         public GitInsightRepository(GitInsightContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public bool HasUpToDateGitInsight(IRepository repo)
