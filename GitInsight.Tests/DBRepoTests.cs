@@ -28,7 +28,7 @@
         }
 
         [Fact]
-        public void GetCommitsOverTime_Returns_Commits_Over_Time()
+        public void GetCommitHistory_Returns_Commits_Over_Time()
         {
             List<DateCount> expected = new() {
                 new(DateTime.Now.Date.AddDays(2), 10),
@@ -36,12 +36,12 @@
                 new(DateTime.Now.Date.AddDays(3), 9),
             };
 
-            var actual = _repository.GetCommitsOverTime();
+            var actual = _repository.GetCommitHistory();
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void GetCommitsOverTimeByUser_Returns_Commits_Over_Time_By_User()
+        public void GetCommitHistoryByUser_Returns_Commits_Over_Time_By_User()
         {
             List<(User, List<DateCount>)> expected = new() 
             {
@@ -72,7 +72,7 @@
                 )
             };
 
-            var actual = _repository.GetCommitsOverTimeByUser();
+            var actual = _repository.GetCommitHistoryByUser();
 
             actual.Should().BeEquivalentTo(expected);
         }
