@@ -46,7 +46,7 @@ public class GitRepoTests
             new DateCount(DateTimeOffset.Now.Date, 5),
             new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1)
         };
-        var actual = repoInsight.GetCommitsOverTime();
+        var actual = repoInsight.GetCommitHistory();
         actual.Should().BeEquivalentTo(expected);
     }
 
@@ -71,7 +71,7 @@ public class GitRepoTests
                 }
             ),
         };
-        var actual = repoInsight.GetCommitsOverTimeByUser();
+        var actual = repoInsight.GetCommitHistoryByUser();
         actual.Should().BeEquivalentTo(expected);
     }
 }
