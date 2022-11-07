@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
-using NSubstitute;
-using System.Linq;
-
-namespace GitInsight;
+﻿namespace GitInsight;
 
 public class Program
 {
@@ -13,9 +9,29 @@ public class Program
         UserMode = string.Join("", args).Contains("-user");
         try
         {
+            IGitRepoInsight repoInsight;
             var repo = new Repository(UserMode ? args[1] : args[0]);
-            var repoInsight = new GitRepoInsight(repo);
-
+            try
+            {
+                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
+                var insightRepository = new InsightRepository(context);
+                (bool upToDate, var gitRepo) = insightRepository.HasUpToDateInsight(repo);
+                if (upToDate)
+                {
+                    repoInsight = new DBRepoInsight(gitRepo);
+                }
+                else
+                {
+                    var localRepo = new GitRepoInsight(repo);
+                    insightRepository.UpdateInsight(localRepo);
+                    repoInsight = localRepo;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                repoInsight = new GitRepoInsight(repo);
+            }
             var formatter = new Formatter(repoInsight);
             var output = UserMode ? formatter.GetCommitsOverTimeByUserFormatted() : formatter.GetCommitsOverTimeFormatted();
             Console.WriteLine(output);
