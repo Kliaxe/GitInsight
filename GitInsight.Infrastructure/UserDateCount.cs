@@ -7,7 +7,7 @@ namespace GitInsight.Infrastructure
         public int Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
         public int Count { get; set; }
         public int GitRepoId { get; set; }
     }
