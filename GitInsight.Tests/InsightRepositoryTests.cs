@@ -1,14 +1,4 @@
-﻿using LibGit2Sharp;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GitInsight.Tests
+﻿namespace GitInsight.Tests
 {
     public class InsightRepositoryTests : IDisposable
     {
@@ -76,7 +66,7 @@ namespace GitInsight.Tests
             querylog.GetEnumerator().Returns(new List<Commit>() { commit }.GetEnumerator());
             commit.Author.Returns(signature);
 
-            var actual = _repository.HasUpToDateInsight(repo);
+            (bool actual, _) = _repository.HasUpToDateInsight(repo);
             Assert.True(actual);
         }
 
@@ -85,11 +75,11 @@ namespace GitInsight.Tests
         {
             var gitRepoInsight = Substitute.For<GitRepoInsight>();
             userDateCounts.Add(new UserDateCount { UserName = "Daniel", Count = 3, Date = DateTime.Now.Date.AddDays(5), GitRepoId = 1 });
-            Dictionary<string, IEnumerable<DateCount>> dateCounts = new()
+            List<(User, IEnumerable<DateCount>)> dateCounts = new()
             {
-                { userDateCounts[0].UserName, userDateCounts.Where(u => u.UserName == userDateCounts[0].UserName).Select(u => new DateCount(u.Date, u.Count)) },
-                { userDateCounts[1].UserName, userDateCounts.Where(u => u.UserName == userDateCounts[1].UserName).Select(u => new DateCount(u.Date, u.Count)) },
-                { userDateCounts[2].UserName, userDateCounts.Where(u => u.UserName == userDateCounts[2].UserName).Select(u => new DateCount(u.Date, u.Count)) }
+                ( new User(userDateCounts[0].UserName, userDateCounts[0].Email), userDateCounts.Where(u => u.UserName == userDateCounts[0].UserName).Select(u => new DateCount(u.Date, u.Count)) ),
+                ( new User(userDateCounts[1].UserName, userDateCounts[1].Email), userDateCounts.Where(u => u.UserName == userDateCounts[1].UserName).Select(u => new DateCount(u.Date, u.Count)) ),
+                ( new User(userDateCounts[2].UserName, userDateCounts[2].Email), userDateCounts.Where(u => u.UserName == userDateCounts[2].UserName).Select(u => new DateCount(u.Date, u.Count)) )
             };
             gitRepoInsight.GetCommitsOverTimeByUser().Returns(dateCounts);
             _repository.UpdateInsight(gitRepoInsight);

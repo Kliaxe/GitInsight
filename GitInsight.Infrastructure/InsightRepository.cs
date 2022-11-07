@@ -16,12 +16,12 @@ namespace GitInsight.Infrastructure
             _context = context;
         }
 
-        public bool HasUpToDateInsight(IRepository repo)
+        public (bool, GitRepo) HasUpToDateInsight(IRepository repo)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateInsight(GitRepoInsight gitRepoInsight)
+        public void UpdateInsight(ILocalGitRepoInsight gitRepoInsight)
         {
             throw new NotImplementedException();
         }

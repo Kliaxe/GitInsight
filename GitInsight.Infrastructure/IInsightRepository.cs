@@ -9,8 +9,8 @@ namespace GitInsight.Infrastructure
 {
     public interface IInsightRepository
     {
-        bool HasUpToDateInsight(IRepository repo);
+        (bool, GitRepo) HasUpToDateInsight(IRepository repo);
 
-        void UpdateInsight(GitRepoInsight gitRepoInsight);
+        void UpdateInsight(ILocalGitRepoInsight gitRepoInsight);
     }
 }

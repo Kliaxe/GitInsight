@@ -1,5 +1,6 @@
 ﻿using LibGit2Sharp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,20 +10,20 @@ namespace GitInsight.Infrastructure
 {
     public class DBRepoInsight : IGitRepoInsight
     {
-        private readonly GitInsightContext _context;
-        public DBRepoInsight(GitInsightContext context)
+        private readonly GitRepo gitRepo;
+        public DBRepoInsight(GitRepo gitRepo)
         {
-            _context = context;
+            this.gitRepo = gitRepo;
         }
 
-        public IEnumerable<DateCount> GetCommitsOverTime() => FormatUserDateCounts(_context.UserDateCounts);
+        public IEnumerable<DateCount> GetCommitsOverTime()
+        {
+            return gitRepo.UserDateCounts.GroupBy(c => c.Date.Date).Select(g => new DateCount(g.Key, g.Sum(u => u.Count)));
+        }
 
-        public Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser()
-            => _context.UserDateCounts.GroupBy(u => u.UserName).ToDictionary(g => g.Key, g => FormatUserDateCounts(g));
-        
-
-        private IEnumerable<DateCount> FormatUserDateCounts(IEnumerable<UserDateCount> userDateCounts)
-            => userDateCounts.Select(g => new DateCount(g.Date, g.Count)).OrderBy(t => t.Date);
-        
+        public IEnumerable<(User, IEnumerable<DateCount>)> GetCommitsOverTimeByUser()
+        {
+            return gitRepo.UserDateCounts.GroupBy(c => new { c.Email, c.UserName }).Select(g => (new User(g.Key.UserName, g.Key.Email), g.Select(u => new DateCount(u.Date, u.Count))));
+        }
     }
 }

@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    public interface IGitRepoInsight
+    public interface ILocalGitRepoInsight : IGitRepoInsight
     {
-        IEnumerable<DateCount> GetCommitsOverTime();
-
-        IEnumerable<(User, IEnumerable<DateCount>)> GetCommitsOverTimeByUser();
     }
 }

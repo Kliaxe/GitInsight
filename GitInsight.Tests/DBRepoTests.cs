@@ -1,17 +1,7 @@
-﻿using FluentAssertions;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GitInsight.Tests
+﻿namespace GitInsight.Tests
 {
     public class DBRepoTests
     {
-        private readonly GitInsightContext _context;
         private readonly DBRepoInsight _repository;
 
         public DBRepoTests()
@@ -41,38 +31,43 @@ namespace GitInsight.Tests
             UserDateCount andréUserCountDate1 = new() { Email = "dinmor@gmail.com", Date = DateTime.Now.Date.AddDays(3), UserName = "André", Count = 7, GitRepoId = 2 };
             context.UserDateCounts.AddRange(adrianUserCountDate1, adrianUserCountDate2, darlingUserCountDate1, andréUserCountDate1);
             context.SaveChanges();
-
-            _context = context;
-            _repository = new DBRepoInsight(_context);
+            _repository = new DBRepoInsight(testRepo1);
         }
 
         [Fact]
         public void Commits_Over_Time_Returns_Commits_Over_Time()
         {
-            var commits = _repository.GetCommitsOverTime();
-
             List<DateCount> expected = new() {
-            new(DateTime.Now.Date, 2),
-            new(DateTime.Now.Date.AddDays(2), 6),
-            new(DateTime.Now.Date.AddDays(1), 5),
-            new(DateTime.Now.Date.AddDays(3), 7)
+                new(DateTime.Now.Date, 2),
+                new(DateTime.Now.Date.AddDays(2), 6),
+                new(DateTime.Now.Date.AddDays(1), 5),
+                new(DateTime.Now.Date.AddDays(3), 7)
             };
 
-            commits.Should().BeEquivalentTo(expected);
+            var actual = _repository.GetCommitsOverTime();
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void Commits_Over_Time_By_User_Return_Commits_Over_Time_By_User()
         {
-            var commits = _repository.GetCommitsOverTimeByUser();
+            List<(User, List<DateCount>)> expected = new()
+            {
+                ( new User("AdrianStein-cloud", "adrian@kari.dk"), new List<DateCount>() { 
+                    new(DateTime.Now.Date, 2), 
+                    new(DateTime.Now.Date.AddDays(2), 6) 
+                }),
+                ( new User("FisseDarling", "mathi-2721@outlook.dk"), new List<DateCount>() { 
+                    new(DateTime.Now.Date.AddDays(1), 5) 
+                }),
+                ( new User("André", "dinmor@gmail.com"), new List<DateCount>() { 
+                    new(DateTime.Now.Date.AddDays(3), 7) 
+                })
+            };
 
-            Dictionary<String, List<DateCount>> expected = new();
+            var actual = _repository.GetCommitsOverTimeByUser();
 
-            expected.Add("AdrianStein-cloud", new List<DateCount>() { new(DateTime.Now.Date, 2), new(DateTime.Now.Date.AddDays(2), 6)});
-            expected.Add("FisseDarling", new List<DateCount>() { new(DateTime.Now.Date.AddDays(1), 5) });
-            expected.Add("André", new List<DateCount>() { new(DateTime.Now.Date.AddDays(3), 7) });
-
-            commits.Should().BeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
 
     }

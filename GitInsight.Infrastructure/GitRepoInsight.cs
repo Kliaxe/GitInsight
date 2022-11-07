@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GitInsight.Infrastructure;
 
-public class GitRepoInsight : IGitRepoInsight
+public class GitRepoInsight : ILocalGitRepoInsight
 {
     private readonly IRepository repo;
 
@@ -16,13 +16,13 @@ public class GitRepoInsight : IGitRepoInsight
     {
         return FormatCommits(repo.Commits);
     }
-    public Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser()
+    public IEnumerable<(User, IEnumerable<DateCount>)> GetCommitsOverTimeByUser()
     {
-        return repo.Commits.GroupBy(c => c.Author.Name).ToDictionary(g => g.Key, g => FormatCommits(g));
+        return repo.Commits.GroupBy(c => new { c.Author.Name, c.Author.Email }).Select(g => (new User(g.Key.Name, g.Key.Email), FormatCommits(g)));
     }
 
     private IEnumerable<DateCount> FormatCommits(IEnumerable<Commit> commits)
     {
-        return commits.GroupBy(c => c.Author.When.Date).Select(g => new DateCount(g.Key, g.Count())).OrderBy(t => t.Date);
+        return commits.GroupBy(c => c.Author.When.Date).Select(g => new DateCount(g.Key, g.Count()));
     }
 }
