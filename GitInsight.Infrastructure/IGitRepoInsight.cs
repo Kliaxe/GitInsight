@@ -8,8 +8,10 @@ namespace GitInsight.Infrastructure
 {
     public interface IGitRepoInsight
     {
-        IEnumerable<DateCount> GetCommitsOverTime();
+        string Name { get; }
+        string Url { get; }
+        IEnumerable<DateCount> GetCommitHistory();
 
-        IEnumerable<(User, IEnumerable<DateCount>)> GetCommitsOverTimeByUser();
+        IEnumerable<(User, IEnumerable<DateCount>)> GetCommitHistoryByUser();
     }
 }

@@ -18,7 +18,7 @@ namespace GitInsight.Tests
         [Fact]
         public void GetCommitsOverTimeFormatted()
         {
-            repoInsightSub.GetCommitsOverTime().Returns(new List<DateCount>()
+            repoInsightSub.GetCommitHistory().Returns(new List<DateCount>()
             {
                 new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
                 new DateCount(DateTimeOffset.Now.Date, 5)
@@ -31,7 +31,7 @@ namespace GitInsight.Tests
         [Fact]
         public void GetCommitsOverTimeByUserFormatted()
         {
-            repoInsightSub.GetCommitsOverTimeByUser().Returns(new List<(User, IEnumerable<DateCount>)>()
+            repoInsightSub.GetCommitHistoryByUser().Returns(new List<(User, IEnumerable<DateCount>)>()
             {
                 (
                     new User("Lukas", "lu@mail"),
