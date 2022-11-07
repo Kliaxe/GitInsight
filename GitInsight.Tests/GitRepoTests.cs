@@ -13,9 +13,9 @@ public class GitRepoTests
 
     public GitRepoTests()
     {
-        var person1 = new Signature("Lukas", "mail", DateTimeOffset.Now.Date);
-        var person2 = new Signature("Adrian", "mail", DateTimeOffset.Now.Date);
-        var person3 = new Signature("Adrian", "mail", DateTimeOffset.Now.AddDays(1).Date);
+        var person1 = new Signature("Lukas", "lu@mail", DateTimeOffset.Now.Date);
+        var person2 = new Signature("Adrian", "ad@mail", DateTimeOffset.Now.Date);
+        var person3 = new Signature("Adrian", "ad@mail", DateTimeOffset.Now.AddDays(1).Date);
 
 
 
@@ -41,37 +41,37 @@ public class GitRepoTests
     [Fact]
     public void GetCommitsOverTime()
     {
-        List<DateCount> expected = new()
+        IEnumerable<DateCount> expected = new List<DateCount>()
         {
             new DateCount(DateTimeOffset.Now.Date, 5),
             new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1)
         };
-
-        Assert.Equal(expected, repoInsight.GetCommitsOverTime());
+        var actual = repoInsight.GetCommitsOverTime();
+        actual.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
     public void GetCommitsOverTimeByUser()
     {
-        var expected = new Dictionary<string, IEnumerable<DateCount>>()
+        var expected = new List<(User, IEnumerable<DateCount>)>()
         {
-            {
-                "Lukas",
+            (
+                new User("Lukas", "lu@mail"),
                 new List<DateCount>()
                 {
                     new DateCount(DateTimeOffset.Now.Date, 2),
                 }
-            },
-            {
-                "Adrian",
+            ),
+            (
+                new User("Adrian", "ad@mail"),
                 new List<DateCount>()
                 {
                     new DateCount(DateTimeOffset.Now.Date, 3),
                     new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
                 }
-            },
+            ),
         };
-
-        Assert.Equal(expected, repoInsight.GetCommitsOverTimeByUser());
+        var actual = repoInsight.GetCommitsOverTimeByUser();
+        actual.Should().BeEquivalentTo(expected);
     }
 }

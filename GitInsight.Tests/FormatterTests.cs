@@ -31,19 +31,23 @@ namespace GitInsight.Tests
         [Fact]
         public void GetCommitsOverTimeByUserFormatted()
         {
-            repoInsightSub.GetCommitsOverTimeByUser().Returns(new Dictionary<string, IEnumerable<DateCount>>
+            repoInsightSub.GetCommitsOverTimeByUser().Returns(new List<(User, IEnumerable<DateCount>)>()
             {
-                { "Adrian", new List<DateCount>
+                (
+                    new User("Lukas", "lu@mail"),
+                    new List<DateCount>()
+                    {
+                        new DateCount(DateTimeOffset.Now.Date, 2),
+                    }
+                ),
+                (
+                    new User("Adrian", "ad@mail"),
+                    new List<DateCount>()
                     {
                         new DateCount(DateTimeOffset.Now.Date, 3),
-                        new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1)
+                        new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
                     }
-                },
-                { "Lukas", new List<DateCount>
-                    {
-                        new DateCount(DateTimeOffset.Now.Date, 2)
-                    }
-                }
+                ),
             });
 
             var formatter = new Formatter(repoInsightSub);
