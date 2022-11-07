@@ -10,8 +10,6 @@ namespace GitInsight.Infrastructure
     {
         IEnumerable<DateCount> GetCommitsOverTime();
 
-        Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser();
+        IEnumerable<(User, IEnumerable<DateCount>)> GetCommitsOverTimeByUser();
     }
-
-    public record DateCount(DateTimeOffset Date, int Count);
 }

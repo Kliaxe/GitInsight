@@ -10,21 +10,20 @@ namespace GitInsight.Infrastructure
 {
     internal class DBRepoInsight : IGitRepoInsight
     {
-        private readonly GitInsightContext context;
-        public DBRepoInsight(GitInsightContext ctx)
+        private readonly GitRepo gitRepo;
+        public DBRepoInsight(GitRepo gitRepo)
         {
-            context = ctx;
+            this.gitRepo = gitRepo;
         }
 
         public IEnumerable<DateCount> GetCommitsOverTime()
         {
-            return context.UserDateCounts.GroupBy(c => c.Date.Date).Select(g => new DateCount(g.Key, g.Sum(u => u.Count)));
+            return gitRepo.UserDateCounts.GroupBy(c => c.Date.Date).Select(g => new DateCount(g.Key, g.Sum(u => u.Count)));
         }
 
-        public Dictionary<string, IEnumerable<DateCount>> GetCommitsOverTimeByUser()
+        public IEnumerable<(User, IEnumerable<DateCount>)> GetCommitsOverTimeByUser()
         {
-            return context.UserDateCounts.GroupBy(c => new { c.Email, c.UserName })
-                .ToDictionary(g => g.Key.UserName, g => g.Select(u => new DateCount(u.Date.Date, u.Count)));
+            return gitRepo.UserDateCounts.GroupBy(c => new { c.Email, c.UserName }).Select(g => (new User(g.Key.UserName, g.Key.Email), g.Select(u => new DateCount(u.Date, u.Count))));
         }
     }
 }
