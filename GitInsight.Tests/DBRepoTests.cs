@@ -12,36 +12,28 @@
             builder.UseSqlite(connection);
             var context = new GitInsightContext(builder.Options);
             context.Database.EnsureCreated();
-            GitRepo testRepo1 = new()
-            {
-                Id = 1,
-                Name = "Mega sejt repository",
-                Version = DateTime.Now.Date
-            };
-            GitRepo testRepo2 = new()
-            {
-                Id = 2,
-                Name = "Mindre sejt repository",
-                Version = DateTime.Now.Date
-            };
-            context.Repositories.AddRange(testRepo1, testRepo2);
-            UserDateCount adrianUserCountDate1 = new() { Email = "adrian@kari.dk", Date = DateTime.Now.Date, UserName = "AdrianStein-cloud", Count = 2, GitRepoId = 1 };
-            UserDateCount adrianUserCountDate2 = new() { Email = "adrian@kari.dk", Date = DateTime.Now.Date.AddDays(1), UserName = "AdrianStein-cloud", Count = 5, GitRepoId = 2 };
-            UserDateCount darlingUserCountDate1 = new() { Email = "mathi-2721@outlook.dk", Date = DateTime.Now.Date.AddDays(2), UserName = "FisseDarling", Count = 6, GitRepoId = 1 };
-            UserDateCount andréUserCountDate1 = new() { Email = "dinmor@gmail.com", Date = DateTime.Now.Date.AddDays(3), UserName = "André", Count = 7, GitRepoId = 2 };
-            context.UserDateCounts.AddRange(adrianUserCountDate1, adrianUserCountDate2, darlingUserCountDate1, andréUserCountDate1);
+            GitRepo repo1 = new() { Name = "Repo 1", Url = "url1.com" };
+            GitRepo repo2 = new() { Name = "Repo 2", Url = "url2.com" };
+            context.Repositories.AddRange(repo1, repo2);
             context.SaveChanges();
-            _repository = new DBRepoInsight(testRepo1);
+            UserDateCount u1 = new() { Count = 2, Date = DateTime.Now.Date, Email = "adrian@kari.dk", UserName = "Adrian", GitRepoId = repo1.Id };
+            UserDateCount u2 = new() { Count = 6, Date = DateTime.Now.Date.AddDays(2), Email = "mathias@gmail.com", UserName = "Darling", GitRepoId = repo1.Id };
+            UserDateCount u3 = new() { Count = 4, Date = DateTime.Now.Date.AddDays(2), Email = "lukas@gmail.com", UserName = "Lukas", GitRepoId = repo1.Id };
+            UserDateCount u4 = new() { Count = 7, Date = DateTime.Now.Date.AddDays(3), Email = "daniel@gmail.com", UserName = "Daniel", GitRepoId = repo1.Id };
+            UserDateCount u5 = new() { Count = 2, Date = DateTime.Now.Date.AddDays(3), Email = "mathias@gmail.com", UserName = "Darling", GitRepoId = repo1.Id };
+            UserDateCount u6 = new() { Count = 5, Date = DateTime.Now.Date.AddDays(1), Email = "adrian@kari.dk", UserName = "Adrian", GitRepoId = repo2.Id };
+            context.UserDateCounts.AddRange(u1, u2, u3, u4, u5, u6);
+            context.SaveChanges();
+            _repository = new DBRepoInsight(repo1);
         }
 
         [Fact]
-        public void Commits_Over_Time_Returns_Commits_Over_Time()
+        public void GetCommitsOverTime_Returns_Commits_Over_Time()
         {
             List<DateCount> expected = new() {
+                new(DateTime.Now.Date.AddDays(2), 10),
                 new(DateTime.Now.Date, 2),
-                new(DateTime.Now.Date.AddDays(2), 6),
-                new(DateTime.Now.Date.AddDays(1), 5),
-                new(DateTime.Now.Date.AddDays(3), 7)
+                new(DateTime.Now.Date.AddDays(3), 9),
             };
 
             var actual = _repository.GetCommitsOverTime();
@@ -49,20 +41,35 @@
         }
 
         [Fact]
-        public void Commits_Over_Time_By_User_Return_Commits_Over_Time_By_User()
+        public void GetCommitsOverTimeByUser_Returns_Commits_Over_Time_By_User()
         {
-            List<(User, List<DateCount>)> expected = new()
+            List<(User, List<DateCount>)> expected = new() 
             {
-                ( new User("AdrianStein-cloud", "adrian@kari.dk"), new List<DateCount>() { 
-                    new(DateTime.Now.Date, 2), 
-                    new(DateTime.Now.Date.AddDays(2), 6) 
-                }),
-                ( new User("FisseDarling", "mathi-2721@outlook.dk"), new List<DateCount>() { 
-                    new(DateTime.Now.Date.AddDays(1), 5) 
-                }),
-                ( new User("André", "dinmor@gmail.com"), new List<DateCount>() { 
-                    new(DateTime.Now.Date.AddDays(3), 7) 
-                })
+                ( 
+                    new("Adrian", "adrian@kari.dk"), new()
+                    { 
+                        new(DateTime.Now.Date, 2)
+                    }
+                ),
+                ( 
+                    new("Darling", "mathias@gmail.com"), new() 
+                    { 
+                        new(DateTime.Now.Date.AddDays(2), 6),
+                        new(DateTime.Now.Date.AddDays(3), 2)
+                    }
+                ),
+                ( 
+                    new("Lukas", "lukas@gmail.com"), new() 
+                    { 
+                        new(DateTime.Now.Date.AddDays(2), 4) 
+                    }
+                ),
+                (
+                    new("Daniel", "daniel@gmail.com"), new()
+                    {
+                        new(DateTime.Now.Date.AddDays(3), 7)
+                    }
+                )
             };
 
             var actual = _repository.GetCommitsOverTimeByUser();
