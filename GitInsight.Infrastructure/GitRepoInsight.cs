@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GitInsight.Infrastructure;
 
-public class GitRepoInsight : IGitRepoInsight
+public class GitRepoInsight : ILocalGitRepoInsight
 {
     private readonly IRepository repo;
     public GitRepoInsight(IRepository repo)

@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    public class AnalysisRepository : IAnalysisRepository
+    public class InsightRepository : IInsightRepository
     {
         private GitInsightContext context;
 
-        public AnalysisRepository(GitInsightContext context)
+        public InsightRepository(GitInsightContext context)
         {
             this.context = context;
         }
 
-        public bool HasUpToDateAnalysis(IRepository repo)
+        public (bool, GitRepo) HasUpToDateAnalysis(IRepository repo)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateAnalysis(GitRepoInsight gitRepoInsight)
+        public void UpdateAnalysis(ILocalGitRepoInsight gitRepoInsight)
         {
             throw new NotImplementedException();
         }
