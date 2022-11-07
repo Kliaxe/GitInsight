@@ -11,7 +11,6 @@ namespace GitInsight.Infrastructure
         public int Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-
         public DateTimeOffset Version { get; set; }
 
         public ICollection<UserDateCount> UserDateCounts { get; set; }
