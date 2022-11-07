@@ -9,6 +9,7 @@ public class GitRepoInsight : ILocalGitRepoInsight
 
     public string Name => repo.Name();
     public string Url => repo.Url();
+    public DateTimeOffset Version => repo.Version();
 
     public GitRepoInsight(IRepository repo)
     {

@@ -19,5 +19,10 @@ namespace GitInsight.Infrastructure
         {
             return repo.Network.Remotes.First().Name;
         }
+
+        public static DateTimeOffset Version(this IRepository repo)
+        {
+            return repo.Commits.Max(c => c.Author.When);
+        }
     }
 }

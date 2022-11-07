@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    internal class DBRepoInsight : IGitRepoInsight
+    public class DBRepoInsight : IGitRepoInsight
     {
         private readonly GitRepo gitRepo;
 
         public string Name => gitRepo.Name;
         public string Url => gitRepo.Url;
+        public DateTimeOffset Version => gitRepo.Version;
 
         public DBRepoInsight(GitRepo gitRepo)
         {
