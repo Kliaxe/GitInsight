@@ -13,9 +13,9 @@ public class GitRepoTests
 
     public GitRepoTests()
     {
-        var person1 = new Signature("Lukas", "mail", DateTimeOffset.Now.Date);
-        var person2 = new Signature("Adrian", "mail", DateTimeOffset.Now.Date);
-        var person3 = new Signature("Adrian", "mail", DateTimeOffset.Now.AddDays(1).Date);
+        var person1 = new Signature("Lukas", "lu@mail", DateTimeOffset.Now.Date);
+        var person2 = new Signature("Adrian", "ad@mail", DateTimeOffset.Now.Date);
+        var person3 = new Signature("Adrian", "ad@mail", DateTimeOffset.Now.AddDays(1).Date);
 
 
 
@@ -41,51 +41,37 @@ public class GitRepoTests
     [Fact]
     public void GetCommitsOverTime()
     {
-        List<DateCount> expected = new()
+        IEnumerable<DateCount> expected = new List<DateCount>()
         {
             new DateCount(DateTimeOffset.Now.Date, 5),
             new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1)
         };
-
-        Assert.Equal(expected, repoInsight.GetCommitsOverTime());
+        var actual = repoInsight.GetCommitHistory();
+        actual.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
     public void GetCommitsOverTimeByUser()
     {
-        var expected = new Dictionary<string, IOrderedEnumerable<DateCount>>()
+        var expected = new List<(User, IEnumerable<DateCount>)>()
         {
-            {
-                "Lukas",
+            (
+                new User("Lukas", "lu@mail"),
                 new List<DateCount>()
                 {
                     new DateCount(DateTimeOffset.Now.Date, 2),
-                }.OrderBy(dc => dc.Date)
-            },
-            {
-                "Adrian",
+                }
+            ),
+            (
+                new User("Adrian", "ad@mail"),
                 new List<DateCount>()
                 {
                     new DateCount(DateTimeOffset.Now.Date, 3),
                     new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
-                }.OrderBy(dc => dc.Date)
-            },
+                }
+            ),
         };
-
-        Assert.Equal(expected, repoInsight.GetCommitsOverTimeByUser());
-    }
-
-    [Fact]
-    public void GetCommitsOverTimeFormatted()
-    {
-        string expected = $"5 {DateTimeOffset.Now.Date}\n1 {DateTimeOffset.Now.AddDays(1).Date}";
-        Assert.Equal(expected, repoInsight.GetCommitsOverTimeFormatted());
-    }
-
-    [Fact]
-    public void GetCommitsOverTimeByUserFormatted()
-    {
-        string expected = $"Adrian\n3 {DateTimeOffset.Now.Date}\n1 {DateTimeOffset.Now.AddDays(1).Date}\n\nLukas\n2 {DateTimeOffset.Now.Date}";
-        Assert.Equal(expected, repoInsight.GetCommitsOverTimeByUserFormatted());
+        var actual = repoInsight.GetCommitHistoryByUser();
+        actual.Should().BeEquivalentTo(expected);
     }
 }
