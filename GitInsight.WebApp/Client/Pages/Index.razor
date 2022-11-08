@@ -6,7 +6,7 @@
 <p1>Please input a URL to the repository you would like to view.</p1>
 <br>
 
-<RadzenTextBox Placeholder="Input URL here..." AutoComplete="false" @oninput=@(args => OnChange(args.Value.ToString()))/>
+<RadzenTextBox Placeholder="https://example.com..." AutoComplete="false" @oninput=@(args => OnChange(args.Value.ToString()))/>
 
 @code {
     public string? RepositoryURL { get; set; }
