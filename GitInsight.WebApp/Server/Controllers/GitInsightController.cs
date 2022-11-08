@@ -7,11 +7,6 @@ namespace GitInsight.WebApp.Server.Controllers
     [Route("[controller]")]
     public class GitInsightController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<GitInsightController> _logger;
 
         public GitInsightController(ILogger<GitInsightController> logger)
