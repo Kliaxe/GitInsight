@@ -1,6 +1,7 @@
+using GitInsight.WebApp.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GitInsight.API.Controllers
+namespace GitInsight.WebApp.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -18,7 +19,7 @@ namespace GitInsight.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
