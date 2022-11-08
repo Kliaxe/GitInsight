@@ -13,19 +13,7 @@ public class Program
             var repo = new Repository(UserMode ? args[1] : args[0]);
             try
             {
-                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
-                var insightRepository = new InsightRepository(context);
-                (bool upToDate, var gitRepo) = insightRepository.HasUpToDateInsight(repo);
-                if (upToDate)
-                {
-                    repoInsight = new DBRepoInsight(gitRepo);
-                }
-                else
-                {
-                    var localRepo = new GitRepoInsight(repo);
-                    insightRepository.UpdateInsight(localRepo);
-                    repoInsight = localRepo;
-                }
+                repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo);
             }
             catch (Exception e)
             {
