@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.Tests", "GitInsi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.Infrastructure", "GitInsight.Infrastructure\GitInsight.Infrastructure.csproj", "{4AEB8385-EF4F-48A4-96BA-0786A6E0C930}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitInsight.WebApp.Server", "GitInsight.WebApp\Server\GitInsight.WebApp.Server.csproj", "{4B55609E-D2FA-4197-AB6D-D4730032821F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.WebApp.Server", "GitInsight.WebApp\Server\GitInsight.WebApp.Server.csproj", "{4B55609E-D2FA-4197-AB6D-D4730032821F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitInsight.WebApp.Client", "GitInsight.WebApp\Client\GitInsight.WebApp.Client.csproj", "{69A91E7B-FD88-42EB-A833-9892CF6D7C7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.WebApp.Client", "GitInsight.WebApp\Client\GitInsight.WebApp.Client.csproj", "{69A91E7B-FD88-42EB-A833-9892CF6D7C7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitInsight.WebApp.Shared", "GitInsight.WebApp\Shared\GitInsight.WebApp.Shared.csproj", "{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.WebApp.Shared", "GitInsight.WebApp\Shared\GitInsight.WebApp.Shared.csproj", "{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
