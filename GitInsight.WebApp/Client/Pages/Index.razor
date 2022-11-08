@@ -1,9 +1,19 @@
 ﻿@page "/"
-
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Setup</h1>
 
-Welcome to your new app.
+<p1>Please input a URL to the repository you would like to view.</p1>
+<br>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<RadzenTextBox Placeholder="Input URL here..." AutoComplete="false" @oninput=@(args => OnChange(args.Value.ToString()))/>
+
+@code {
+    public string? RepositoryURL { get; set; }
+
+    void OnChange(string value)
+    {
+        Console.WriteLine($"Repository URL changed to: {value}");
+        RepositoryURL = value;
+    }
+}
