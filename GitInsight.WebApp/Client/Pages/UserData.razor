@@ -6,6 +6,50 @@
 
 <p>Here you can view commits per day by user</p>
 
-@code {
+@using GitInsight.Infrastructure
+@using GitInsight.WebApp.Shared
 
+@inject HttpClient Http
+
+@if (InputData.NameOfOwner == null){
+    <p><em>Please fill in the information on the home page...</em></p>
+}
+else if (UserDateCounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (UserDateCounts userdatecounts in UserDateCounts)
+            {
+                <tr>
+                    <td>@userdatecounts.User.Name &emsp; (@userdatecounts.User.Email)</td>
+                </tr>
+                foreach (DateCount datecount in userdatecounts.DateCounts)
+                {
+                    <tr>
+                        <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@datecount.Count</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private UserDateCounts[]? UserDateCounts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserDateCounts = await Http.GetFromJsonAsync<UserDateCounts[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository + "/user"); 
+    }
 }
