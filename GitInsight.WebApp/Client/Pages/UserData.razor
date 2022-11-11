@@ -2,9 +2,7 @@
 
 <PageTitle>User Data</PageTitle>
 
-<h1>User data</h1>
-
-<p>Here you can view commits per day by user</p>
+<h1>Commits Per Day By User</h1>
 
 @using GitInsight.Infrastructure
 @using GitInsight.WebApp.Shared
@@ -20,7 +18,10 @@ else if (UserDateCounts == null)
 }
 else
 {
-    <table class="table">
+    @foreach (UserDateCounts userdatecounts in UserDateCounts)
+    {
+        <h3>@userdatecounts.User.Name</h3>
+        <table class="table">
         <thead>
             <tr>
                 <th>Date</th>
@@ -28,21 +29,18 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (UserDateCounts userdatecounts in UserDateCounts)
-            {
-                <tr>
-                    <td>@userdatecounts.User.Name &emsp; (@userdatecounts.User.Email)</td>
-                </tr>
-                foreach (DateCount datecount in userdatecounts.DateCounts)
+                @foreach (DateCount datecount in userdatecounts.DateCounts)
                 {
                     <tr>
                         <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
                         <td>@datecount.Count</td>
                     </tr>
                 }
-            }
         </tbody>
     </table>
+    <br>
+    <br>
+    }
 }
 
 @code {
