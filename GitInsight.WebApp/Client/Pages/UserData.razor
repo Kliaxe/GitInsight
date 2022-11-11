@@ -20,7 +20,15 @@ else
 {
     @foreach (UserDateCounts userdatecounts in UserDateCounts)
     {
-        <h3>@userdatecounts.User.Name</h3>
+        if(userdatecounts.User.Email.Contains("users.noreply.github.com"))
+        {
+            <h3>@userdatecounts.User.Name</h3>
+        }
+        else
+        {
+            <h3>@userdatecounts.User.Name &emsp; (@userdatecounts.User.Email)</h3>
+        }
+        
         <table class="table">
         <thead>
             <tr>
