@@ -1,22 +1,39 @@
 ﻿using GitInsight.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GitInsight.Tests
 {
-    public class GitRepositoryIntegrationTests
+    public class GitRepositoryIntegrationTests : IClassFixture<DatabaseFixture>, IDisposable
     {
+        private IGitRepoInsight repoInsight;
+        private readonly GitInsightContext _context;
+
+        public GitRepositoryIntegrationTests(DatabaseFixture fixture)
+        {
+            var connection = new SqliteConnection("Filename=:memory:");
+            connection.Open();
+            var builder = new DbContextOptionsBuilder<GitInsightContext>();
+            builder.UseSqlite(connection);
+            _context = new GitInsightContext(builder.Options);
+            _context.Database.EnsureCreated();
+            _context.SaveChanges();
+
+            repoInsight = GitInsightRepoFactory.CreateRepoInsight(fixture.repo, _context);
+        }
+
         [Fact]
         public void GitRepoInsightTest()
         {
-            var path = "";
-            var repo = new Repository(path);
-            var repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo);
             var formatter = new Formatter(repoInsight);
-            var output = formatter.GetCommitsOverTimeFormatted();
+            string expected = $"5 26-10-2022 00:00:00";
+            Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
         }
+
+        public void Dispose() => _context.Dispose();
     }
 }
