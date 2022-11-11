@@ -27,15 +27,13 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}/{user}")]
-        public async Task<IEnumerable<string>> Get(string owner, string repositoryName, string user)
+        public async Task<IEnumerable<UserDateCounts>> Get(string owner, string repositoryName, string user)
         {
             if (user == "user")
             {
                 var repo = GetLocalRepository(owner, repositoryName);
                 IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-                var formatter = new Formatter(repoInsight);
-                //var result = formatter.GetCommitsOverTimeFormatted();
-                var testFormat = repoInsight.GetCommitHistoryByUser().SelectMany(u => u.Item2.Select(dc => $"{u.Item1.name} - {dc.Date} - {dc.Count}"));
+                var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
                 return testFormat;
             }
             return null;
