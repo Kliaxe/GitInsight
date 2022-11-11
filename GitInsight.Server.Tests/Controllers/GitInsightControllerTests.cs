@@ -56,7 +56,7 @@ namespace GitInsight.Server.Tests.Controllers
                 new UserDateCounts(new User("Test", "Test@github.com"),
                 new List<DateCount>() { new DateCount(new DateTime(0198, 10, 4), 1) })
             };
-            var result = await _controller.Get(_gitOwner, _gitRepositoryName, "user").Result.;
+            var result = await _controller.Get(_gitOwner, _gitRepositoryName, "user");
             result.Should().NotBeEquivalentTo(expected);
         }
 
