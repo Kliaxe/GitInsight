@@ -1,0 +1,19 @@
+﻿@page "/"
+<PageTitle>Index</PageTitle>
+
+<h1>Setup</h1>
+
+<p1>Please input a URL to the repository you would like to view.</p1>
+<br>
+
+<RadzenTextBox Placeholder="https://example.com..." AutoComplete="false" @oninput=@(args => OnChange(args.Value.ToString()))/>
+
+@code {
+    public string? RepositoryURL { get; set; }
+
+    void OnChange(string value)
+    {
+        Console.WriteLine($"Repository URL changed to: {value}");
+        RepositoryURL = value;
+    }
+}

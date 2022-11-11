@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
-namespace GitInsight
+namespace GitInsight.Infrastructure
 {
-    internal class GitInsightContextFactory : IDesignTimeDbContextFactory<GitInsightContext>
+    public class GitInsightContextFactory : IDesignTimeDbContextFactory<GitInsightContext>
     {
         public GitInsightContext CreateDbContext(string[] args)
         {
-            var configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+            var configuration = new ConfigurationBuilder().AddUserSecrets<GitInsightContextFactory>().Build();
             var connectionString = configuration.GetConnectionString("GitInsight");
 
             var optionsBuilder = new DbContextOptionsBuilder<GitInsightContext>();

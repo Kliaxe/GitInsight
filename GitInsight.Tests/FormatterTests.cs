@@ -20,11 +20,11 @@ namespace GitInsight.Tests
         {
             repoInsightSub.GetCommitHistory().Returns(new List<DateCount>()
             {
-                new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
-                new DateCount(DateTimeOffset.Now.Date, 5)
+                new DateCount(new DateTime(2022, 1, 31), 1),
+                new DateCount(new DateTime(2022, 1, 27), 5)
             });
             var formatter = new Formatter(repoInsightSub);
-            string expected = $"5 {DateTimeOffset.Now.Date}\n1 {DateTimeOffset.Now.AddDays(1).Date}";
+            string expected = $"5 27/01/2022\n1 31/01/2022";
             Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
         }
 
@@ -37,21 +37,21 @@ namespace GitInsight.Tests
                     new User("Lukas", "lu@mail"),
                     new List<DateCount>()
                     {
-                        new DateCount(DateTimeOffset.Now.Date, 2),
+                        new DateCount(new DateTime(2022, 1, 27), 2),
                     }
                 ),
                 (
                     new User("Adrian", "ad@mail"),
                     new List<DateCount>()
                     {
-                        new DateCount(DateTimeOffset.Now.Date, 3),
-                        new DateCount(DateTimeOffset.Now.AddDays(1).Date, 1),
+                        new DateCount(new DateTime(2022, 1, 27), 3),
+                        new DateCount(new DateTime(2022, 1, 31), 1),
                     }
                 ),
             });
 
             var formatter = new Formatter(repoInsightSub);
-            string expected = $"Adrian\n3 {DateTimeOffset.Now.Date}\n1 {DateTimeOffset.Now.AddDays(1).Date}\n\nLukas\n2 {DateTimeOffset.Now.Date}";
+            string expected = $"Adrian\n3 27/01/2022\n1 31/01/2022\n\nLukas\n2 27/01/2022";
             Assert.Equal(expected, formatter.GetCommitsOverTimeByUserFormatted());
         }
     }
