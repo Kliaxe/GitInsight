@@ -28,7 +28,7 @@ else
             @foreach (DateCount datecount in dateCounts)
             {
                 <tr>
-                    <td>@datecount.Date</td>
+                    <td>@datecount.Date.ToString("MM/dd/yyyy")</td>
                     <td>@datecount.Count</td>
                 </tr>
             }
