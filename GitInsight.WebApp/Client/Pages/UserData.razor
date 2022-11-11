@@ -14,7 +14,7 @@
 @if (InputData.NameOfOwner == null){
     <p><em>Please fill in the information on the home page...</em></p>
 }
-else if (dateCounts == null)
+else if (UserDateCounts == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -28,22 +28,28 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (DateCount datecount in dateCounts)
+            @foreach (UserDateCounts userdatecounts in UserDateCounts)
             {
                 <tr>
-                    <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
-                    <td>@datecount.Count</td>
+                    <td>@userdatecounts.User.Name &emsp; (@userdatecounts.User.Email)</td>
                 </tr>
+                foreach (DateCount datecount in userdatecounts.DateCounts)
+                {
+                    <tr>
+                        <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@datecount.Count</td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
 }
 
 @code {
-    private DateCount[]? dateCounts;
+    private UserDateCounts[]? UserDateCounts;
 
     protected override async Task OnInitializedAsync()
     {
-        dateCounts = await Http.GetFromJsonAsync<DateCount[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository);
+        UserDateCounts = await Http.GetFromJsonAsync<UserDateCounts[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository + "/user"); 
     }
 }
