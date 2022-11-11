@@ -11,7 +11,10 @@
 
 @inject HttpClient Http
 
-@if (dateCounts == null)
+@if (InputData.NameOfOwner == null){
+    <p><em>Please fill in the information on the home page...</em></p>
+}
+else if (dateCounts == null)
 {
     <p><em>Loading...</em></p>
 }
