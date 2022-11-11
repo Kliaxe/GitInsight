@@ -6,8 +6,41 @@
 
 <p>Here you can view commits per day</p>
 
+@using GitInsight.Infrastructure
+@using GitInsight.WebApp.Shared
 
+@inject HttpClient Http
+
+@if (dateCounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DateCount datecount in dateCounts)
+            {
+                <tr>
+                    <td>@datecount.Date</td>
+                    <td>@datecount.Count</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private DateCount[]? dateCounts;
 
+    protected override async Task OnInitializedAsync()
+    {
+        dateCounts = await Http.GetFromJsonAsync<DateCount[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository);
+    }
 }
