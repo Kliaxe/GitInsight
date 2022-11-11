@@ -56,6 +56,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        UserDateCounts = await Http.GetFromJsonAsync<UserDateCounts[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository + "/user"); 
+        if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
+            UserDateCounts = await Http.GetFromJsonAsync<UserDateCounts[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository + "/user"); 
+        }
     }
 }
