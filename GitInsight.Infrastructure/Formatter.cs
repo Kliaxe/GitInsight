@@ -17,7 +17,7 @@ namespace GitInsight.Infrastructure
 
         public string GetCommitsOverTimeByUserFormatted()
         {
-            return repoInsight.GetCommitHistoryByUser().OrderBy(t => t.Item1.name).Select(t => t.Item1.name + "\n" + FormatDateCount(t.Item2)).Aggregate((s1, s2) => s1 + "\n\n" + s2);
+            return repoInsight.GetCommitHistoryByUser().OrderBy(t => t.Item1.Name).Select(t => t.Item1.Name + "\n" + FormatDateCount(t.Item2)).Aggregate((s1, s2) => s1 + "\n\n" + s2);
         }
 
         public string GetCommitsOverTimeFormatted()
