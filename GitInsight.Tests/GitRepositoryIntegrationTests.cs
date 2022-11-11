@@ -1,4 +1,5 @@
 ﻿using GitInsight.Infrastructure;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
@@ -12,6 +13,7 @@ namespace GitInsight.Tests
     {
         private IGitRepoInsight repoInsight;
         private readonly GitInsightContext _context;
+        private IRepository repo;
 
         public GitRepositoryIntegrationTests(DatabaseFixture fixture)
         {
@@ -22,8 +24,8 @@ namespace GitInsight.Tests
             _context = new GitInsightContext(builder.Options);
             _context.Database.EnsureCreated();
             _context.SaveChanges();
-
-            repoInsight = GitInsightRepoFactory.CreateRepoInsight(fixture.repo, _context);
+            repo = fixture.repo;
+            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context);
         }
 
         [Fact]
@@ -31,6 +33,18 @@ namespace GitInsight.Tests
         {
             var formatter = new Formatter(repoInsight);
             string expected = $"5 26/10/2022";
+            repoInsight.GetType().Should().Be(typeof(GitRepoInsight));
+            Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
+        }
+
+        [Fact]
+        public void DBRepoInsightTest()
+        {
+            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context);
+
+            var formatter = new Formatter(repoInsight);
+            string expected = $"5 26/10/2022";
+            repoInsight.GetType().Should().Be(typeof(DBRepoInsight));
             Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
         }
 
