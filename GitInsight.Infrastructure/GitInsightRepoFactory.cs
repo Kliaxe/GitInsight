@@ -11,9 +11,8 @@ namespace GitInsight.Infrastructure
     public class GitInsightRepoFactory
     {
         
-        public static IGitRepoInsight CreateRepoInsight(IRepository repo, GitInsightContextFactory contextFactory)
+        public static IGitRepoInsight CreateRepoInsight(IRepository repo, GitInsightContext context)
         {
-            var context = contextFactory.CreateDbContext(Array.Empty<string>());
             var insightRepository = new InsightRepository(context);
 
             (bool upToDate, var gitRepo) = insightRepository.HasUpToDateInsight(repo);

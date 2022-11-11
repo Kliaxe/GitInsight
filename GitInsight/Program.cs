@@ -13,7 +13,8 @@ public class Program
             var repo = new Repository(UserMode ? args[1] : args[0]);
             try
             {
-                repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo);
+                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
+                repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, context);
             }
             catch (Exception e)
             {
