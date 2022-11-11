@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace GitInsight.Infrastructure
 
         private string FormatDateCount(IEnumerable<DateCount> dateCounts)
         {
-            return dateCounts.OrderBy(d => d.Date).Select(dc => $"{dc.Count} {dc.Date.Date}").Aggregate((s1, s2) => s1 + "\n" + s2);
+            return dateCounts.OrderBy(d => d.Date).Select(dc => $"{dc.Count} {dc.Date.Date.ToString("d", CultureInfo.GetCultureInfo("fr-FR"))}").Aggregate((s1, s2) => s1 + "\n" + s2);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace GitInsight.Tests
         public void GitRepoInsightTest()
         {
             var formatter = new Formatter(repoInsight);
-            string expected = $"5 26-10-2022 00:00:00";
+            string expected = $"5 26/10/2022";
             Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
         }
 
