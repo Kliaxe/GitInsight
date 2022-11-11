@@ -19,14 +19,26 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}")]
-        public async Task<IEnumerable<string>> Get(string owner, string repositoryName)
+        public async Task<IEnumerable<DateCount>> Get(string owner, string repositoryName)
         {
-            var repo = GetLocalRepository(owner, repositoryName);
-            IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-            var formatter = new Formatter(repoInsight);
-            //var result = formatter.GetCommitsOverTimeFormatted();
-            var testFormat = repoInsight.GetCommitHistoryByUser().SelectMany(u => u.Item2.Select(dc => $"{u.Item1.name} - {dc.Date} - {dc.Count}"));
-            return testFormat;
+                var repo = GetLocalRepository(owner, repositoryName);
+                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+                return repoInsight.GetCommitHistory();
+        }
+
+        [HttpGet("{owner}/{repositoryName}/{user}")]
+        public async Task<IEnumerable<string>> Get(string owner, string repositoryName, string user)
+        {
+            if (user == "user")
+            {
+                var repo = GetLocalRepository(owner, repositoryName);
+                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+                var formatter = new Formatter(repoInsight);
+                //var result = formatter.GetCommitsOverTimeFormatted();
+                var testFormat = repoInsight.GetCommitHistoryByUser().SelectMany(u => u.Item2.Select(dc => $"{u.Item1.name} - {dc.Date} - {dc.Count}"));
+                return testFormat;
+            }
+            return null;
         }
 
         private IRepository GetLocalRepository(string owner, string repositoryName)
