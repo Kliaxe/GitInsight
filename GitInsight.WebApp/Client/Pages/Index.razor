@@ -3,17 +3,27 @@
 
 <h1>Setup</h1>
 
-<p1>Please input a URL to the repository you would like to view.</p1>
+<p1>Please input the name of the repository owner</p1>
+<br>
+<RadzenTextBox Value="@InputData.NameOfOwner" Placeholder="Name of owner..." AutoComplete="false" @oninput=@(args => OnOwnerChange(args.Value.ToString()))/>
+<br>
 <br>
 
-<RadzenTextBox Placeholder="https://example.com..." AutoComplete="false" @oninput=@(args => OnChange(args.Value.ToString()))/>
+<p1>Please input the name of the repository</p1>
+<br>
+<RadzenTextBox Value="@InputData.NameOfRepository" Placeholder="Name of repository..." AutoComplete="false" @oninput=@(args => OnRepoNameChange(args.Value.ToString())) />
+<br>
 
 @code {
-    public string? RepositoryURL { get; set; }
-
-    void OnChange(string value)
+    void OnOwnerChange(string value)
     {
-        Console.WriteLine($"Repository URL changed to: {value}");
-        RepositoryURL = value;
+        Console.WriteLine($"Name of owner changed to: {value}");
+        InputData.NameOfOwner = value;
+    }
+
+    void OnRepoNameChange(string value)
+    {
+        Console.WriteLine($"Name of repository changed to: {value}");
+        InputData.NameOfRepository = value;
     }
 }
