@@ -1,0 +1,73 @@
+﻿@page "/userdatacharts"
+
+<PageTitle>User Data Charts</PageTitle>
+
+<h1>Commits Per Day By User Charts</h1>
+
+@using GitInsight.Infrastructure
+@using GitInsight.WebApp.Shared
+
+@inject HttpClient Http
+
+@if (InputData.NameOfOwner == null)
+{
+			<p><em>Please fill in the information on the setup page...</em></p>
+}
+else if (UserDateCounts == null)
+{
+			<p><em>Loading...</em></p>
+}
+else
+{
+				<RadzenCard Class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
+											<RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
+										<RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
+										<RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+										<RadzenLabel Text="Show Data Labels" For="dataLabels" />
+									</RadzenCard>
+
+	@foreach (UserDateCounts userdatecounts in UserDateCounts)
+	{
+		if (userdatecounts.User.Email.Contains("users.noreply.github.com"))
+		{
+												<h3>@userdatecounts.User.Name</h3>
+		}
+		else
+		{
+												<h3>@userdatecounts.User.Name &emsp; (@userdatecounts.User.Email)</h3>
+		}
+
+		IEnumerable<DataItem> dataItems = Array.Empty<DataItem>();
+
+		dataItems = userdatecounts.DateCounts.Select(x => new DataItem() { CommitCount = x.Count, Date = x.Date.ToString("dd/MM/yyyy") }).Reverse();
+
+						<RadzenChart>
+						  <RadzenLineSeries Smooth="@smooth" Data="@dataItems" CategoryProperty="Date" ValueProperty="CommitCount" Title="Number of commits">
+							  <RadzenMarkers MarkerType="MarkerType.Circle" />
+							  <RadzenSeriesDataLabels Visible="@showDataLabels" />
+						  </RadzenLineSeries>
+						</RadzenChart>
+						<br>
+	}
+}
+
+@code {
+	private IEnumerable<UserDateCounts> UserDateCounts;
+
+	bool showDataLabels = false;
+	bool smooth = false;
+
+	class DataItem
+	{
+		public string Date { get; set; }
+		public double CommitCount { get; set; }
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (InputData.NameOfOwner is not null || InputData.NameOfRepository is not null)
+		{
+			UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).UserDateCounts;
+		}
+	}
+}

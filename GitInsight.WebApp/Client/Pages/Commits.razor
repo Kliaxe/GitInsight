@@ -2,9 +2,7 @@
 
 <PageTitle>Commits</PageTitle>
 
-<h1>Commits</h1>
-
-<p>Here you can view commits per day</p>
+<h1>Commits Per Day</h1>
 
 @using GitInsight.Infrastructure
 @using GitInsight.WebApp.Shared
@@ -12,7 +10,7 @@
 @inject HttpClient Http
 
 @if (InputData.NameOfOwner == null){
-    <p><em>Please fill in the information on the home page...</em></p>
+    <p><em>Please fill in the information on the setup page...</em></p>
 }
 else if (dateCounts == null)
 {
@@ -28,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (DateCount datecount in dateCounts)
+            @foreach (DateCount datecount in dateCounts.Reverse())
             {
                 <tr>
                     <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
@@ -40,10 +38,12 @@ else
 }
 
 @code {
-    private DateCount[]? dateCounts;
+    private IEnumerable<DateCount>? dateCounts;
 
     protected override async Task OnInitializedAsync()
     {
-        dateCounts = await Http.GetFromJsonAsync<DateCount[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository);
+        if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
+            dateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.DateCounts;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace GitInsight.Infrastructure
 
         public string GetCommitsOverTimeByUserFormatted()
         {
-            return repoInsight.GetCommitHistoryByUser().OrderBy(t => t.Item1.name).Select(t => t.Item1.name + "\n" + FormatDateCount(t.Item2)).Aggregate((s1, s2) => s1 + "\n\n" + s2);
+            return repoInsight.GetCommitHistoryByUser().OrderBy(t => t.Item1.Name).Select(t => t.Item1.Name + "\n" + FormatDateCount(t.Item2)).Aggregate((s1, s2) => s1 + "\n\n" + s2);
         }
 
         public string GetCommitsOverTimeFormatted()
@@ -27,7 +28,7 @@ namespace GitInsight.Infrastructure
 
         private string FormatDateCount(IEnumerable<DateCount> dateCounts)
         {
-            return dateCounts.OrderBy(d => d.Date).Select(dc => $"{dc.Count} {dc.Date.Date}").Aggregate((s1, s2) => s1 + "\n" + s2);
+            return dateCounts.OrderBy(d => d.Date).Select(dc => $"{dc.Count} {dc.Date.Date.ToString("d", CultureInfo.GetCultureInfo("fr-FR"))}").Aggregate((s1, s2) => s1 + "\n" + s2);
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using LibGit2Sharp;
+using System.Collections;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Xml.Linq;
 
 namespace GitInsight.Infrastructure;
 
@@ -28,5 +31,26 @@ public class GitRepoInsight : ILocalGitRepoInsight
     private IEnumerable<DateCount> FormatCommits(IEnumerable<Commit> commits)
     {
         return commits.GroupBy(c => c.Author.When.Date).Select(g => new DateCount(g.Key, g.Count()));
+    }
+
+    public async Task<IEnumerable<Fork>> GetForks()
+    {
+        client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("GitInsight"));
+        var (owner, name) = repo.OwnerAndName();
+        var forks = await client.Repository.Forks.GetAll(owner, name);
+
+        return forks.Select(async r => new Fork(r.FullName, await GetForkRecursive(r))).Select(t => t.Result);
+    }
+
+    Octokit.GitHubClient client;
+
+    private async Task<IEnumerable<Fork>> GetForkRecursive(Octokit.Repository repo)
+    {
+        string owner = repo.FullName.Split("/")[0];
+        string name = repo.FullName.Split("/")[1];
+        if (repo.ForksCount == 0) return new List<Fork>();
+
+        var forks = await client.Repository.Forks.GetAll(owner, name);
+        return forks.Select(async r => new Fork(r.FullName, await GetForkRecursive(r))).Select(t => t.Result);
     }
 }

@@ -30,5 +30,10 @@ namespace GitInsight.Infrastructure
         {
             return gitRepo.UserDateCounts.GroupBy(c => new { c.Email, c.UserName }).Select(g => (new User(g.Key.UserName, g.Key.Email), g.Select(u => new DateCount(u.Date, u.Count))));
         }
+
+        public Task<IEnumerable<Fork>> GetForks()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

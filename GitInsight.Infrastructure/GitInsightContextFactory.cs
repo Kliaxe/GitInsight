@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace GitInsight.Infrastructure
 {
-    internal class GitInsightContextFactory : IDesignTimeDbContextFactory<GitInsightContext>
+    public class GitInsightContextFactory : IDesignTimeDbContextFactory<GitInsightContext>
     {
         public GitInsightContext CreateDbContext(string[] args)
         {

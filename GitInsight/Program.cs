@@ -1,4 +1,6 @@
 ﻿namespace GitInsight;
+using Octokit;
+using Repository = LibGit2Sharp.Repository;
 
 public class Program
 {
@@ -13,7 +15,8 @@ public class Program
             var repo = new Repository(UserMode ? args[1] : args[0]);
             try
             {
-                repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo);
+                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
+                repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, context);
             }
             catch (Exception e)
             {
@@ -23,7 +26,8 @@ public class Program
             var formatter = new Formatter(repoInsight);
             var output = UserMode ? formatter.GetCommitsOverTimeByUserFormatted() : formatter.GetCommitsOverTimeFormatted();
             Console.WriteLine(output);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }

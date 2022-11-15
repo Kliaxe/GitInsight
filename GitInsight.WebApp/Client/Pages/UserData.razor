@@ -2,9 +2,7 @@
 
 <PageTitle>User Data</PageTitle>
 
-<h1>User data</h1>
-
-<p>Here you can view commits per day by user</p>
+<h1>Commits Per Day By User</h1>
 
 @using GitInsight.Infrastructure
 @using GitInsight.WebApp.Shared
@@ -12,15 +10,26 @@
 @inject HttpClient Http
 
 @if (InputData.NameOfOwner == null){
-    <p><em>Please fill in the information on the home page...</em></p>
+    <p><em>Please fill in the information on the setup page...</em></p>
 }
-else if (dateCounts == null)
+else if (UserDateCounts == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    @foreach (UserDateCounts userdatecounts in UserDateCounts)
+    {
+        if(userdatecounts.User.Email.Contains("users.noreply.github.com"))
+        {
+            <h3>@userdatecounts.User.Name</h3>
+        }
+        else
+        {
+            <h3>@userdatecounts.User.Name &emsp; (@userdatecounts.User.Email)</h3>
+        }
+        
+        <table class="table">
         <thead>
             <tr>
                 <th>Date</th>
@@ -28,22 +37,27 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (DateCount datecount in dateCounts)
-            {
-                <tr>
-                    <td>@datecount.Date</td>
-                    <td>@datecount.Count</td>
-                </tr>
-            }
+                @foreach (DateCount datecount in userdatecounts.DateCounts.Reverse())
+                {
+                    <tr>
+                        <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@datecount.Count</td>
+                    </tr>
+                }
         </tbody>
     </table>
+    <br>
+    <br>
+    }
 }
 
 @code {
-    private DateCount[]? dateCounts;
+    private IEnumerable<UserDateCounts> UserDateCounts;
 
     protected override async Task OnInitializedAsync()
     {
-        dateCounts = await Http.GetFromJsonAsync<DateCount[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository);
+        if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
+            UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).UserDateCounts; 
+        }
     }
 }
