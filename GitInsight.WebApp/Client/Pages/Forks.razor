@@ -10,7 +10,7 @@
 @inject HttpClient Http
 
 @if (InputData.NameOfOwner == null){
-    <p><em>Please fill in the information on the home page...</em></p>
+    <p><em>Please fill in the information on the setup page...</em></p>
 }
 else if (false)
 {
@@ -18,15 +18,24 @@ else if (false)
 }
 else
 {
-
+         <div class="col-md-4">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" class="mb-0">Data-binding to Employees</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" class="mb-2">Data from a single self-referencing table.</RadzenText>
+                    <RadzenTree Data=@forks Style="height: 300px">
+                            <RadzenTreeLevel TextProperty="Fullname"/>
+                    </RadzenTree>
+                </RadzenCard>
+            </div>
 }
 
 @code {
+    private IEnumerable<Fork>? forks;
 
     protected override async Task OnInitializedAsync()
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-
+            forks = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.Forks;
         }
     }
 }

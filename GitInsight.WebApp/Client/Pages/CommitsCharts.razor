@@ -9,7 +9,15 @@
 
 @inject HttpClient Http
 
-<RadzenCard Class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
+@if (InputData.NameOfOwner == null){
+    <p><em>Please fill in the information on the setup page...</em></p>
+}
+else if (dateCounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else{
+    <RadzenCard Class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
                     <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
                     <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
                     <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
@@ -21,13 +29,6 @@
       <RadzenSeriesDataLabels Visible="@showDataLabels" />
   </RadzenLineSeries>
 </RadzenChart>
-
-@if (InputData.NameOfOwner == null){
-    <p><em>Please fill in the information on the home page...</em></p>
-}
-else if (dateCounts == null)
-{
-    <p><em>Loading...</em></p>
 }
 
 @code {
@@ -42,12 +43,12 @@ else if (dateCounts == null)
         public double CommitCount { get; set; }
     }
 
-    private DateCount[]? dateCounts;
+    private IEnumerable<DateCount> dateCounts;
 
     protected override async Task OnInitializedAsync()
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-            dateCounts = await Http.GetFromJsonAsync<DateCount[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository);
+            dateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).DateCounts;
             dataItems = dateCounts.Select(x => new DataItem() { CommitCount = x.Count, Date = x.Date.ToString("dd/MM/yyyy") }).Reverse();
         }
     }
