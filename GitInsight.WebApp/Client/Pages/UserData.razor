@@ -37,7 +37,7 @@ else
             </tr>
         </thead>
         <tbody>
-                @foreach (DateCount datecount in userdatecounts.DateCounts)
+                @foreach (DateCount datecount in userdatecounts.DateCounts.Reverse())
                 {
                     <tr>
                         <td>@datecount.Date.ToString("dd/MM/yyyy")</td>

@@ -1,0 +1,32 @@
+﻿@page "/forks"
+
+<PageTitle>Forks</PageTitle>
+
+<h1>Forks</h1>
+
+@using GitInsight.Infrastructure
+@using GitInsight.WebApp.Shared
+
+@inject HttpClient Http
+
+@if (InputData.NameOfOwner == null){
+    <p><em>Please fill in the information on the home page...</em></p>
+}
+else if (false)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+}
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
+
+        }
+    }
+}
