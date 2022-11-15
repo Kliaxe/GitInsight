@@ -1,4 +1,5 @@
 using Bunit;
+using Radzen.Blazor;
 using RichardSzalay.MockHttp;
 
 namespace GitInsight.Client.Tests;
@@ -16,14 +17,14 @@ public class CommitsTests
         });
 
         var index = context.RenderComponent<Index>();
-        var textBoxes = index.WaitForElements("RadzenTextBox");
-        textBoxes[0].Change("Kliaxe");
-        textBoxes[1].Change("https://github.com/Lukski175/ChittyChat");
+        index.Find("#owner").Change("Kliaxe");
+        index.Find("#repository").Change("https://github.com/Lukski175/ChittyChat");
 
         var commits = context.RenderComponent<Commits>();
-        var ths = commits.WaitForElements("th");
+        //commits.Find("p").MarkupMatches("<em>Please fill in the information on the home page...</em>");
+        /*var ths = commits.FindAll("th");
         ths[0].TextContent.MarkupMatches("Date");
-        ths[1].TextContent.MarkupMatches("Count");
+        ths[1].TextContent.MarkupMatches("Count");*/
     }
 
     [Fact]

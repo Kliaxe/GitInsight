@@ -5,12 +5,12 @@
 
 <p1>Please input the name of the repository owner</p1>
 <br>
-<RadzenTextBox Placeholder="Name of owner..." AutoComplete="false" @oninput=@(args => OnOwnerChange(args.Value.ToString()))/>
+<RadzenTextBox id="owner" Placeholder="Name of owner..." AutoComplete="false" @oninput=@(args => OnOwnerChange(args.Value.ToString()))/>
 <br>
 
 <p1>Please input the name of the repository</p1>
 <br>
-<RadzenTextBox Placeholder="Name of repository..." AutoComplete="false" @oninput=@(args => OnRepoNameChange(args.Value.ToString())) />
+<RadzenTextBox id="repository" Placeholder="Name of repository..." AutoComplete="false" @oninput=@(args => OnRepoNameChange(args.Value.ToString())) />
 <br>
 
 @code {
