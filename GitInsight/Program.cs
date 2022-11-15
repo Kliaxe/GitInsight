@@ -1,4 +1,6 @@
 ﻿namespace GitInsight;
+using Octokit;
+using Repository = LibGit2Sharp.Repository;
 
 public class Program
 {
@@ -24,7 +26,8 @@ public class Program
             var formatter = new Formatter(repoInsight);
             var output = UserMode ? formatter.GetCommitsOverTimeByUserFormatted() : formatter.GetCommitsOverTimeFormatted();
             Console.WriteLine(output);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }

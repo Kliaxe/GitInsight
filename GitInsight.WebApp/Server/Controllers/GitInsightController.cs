@@ -39,6 +39,7 @@ namespace GitInsight.WebApp.Server.Controllers
             return null;
         }
 
+
         private IRepository GetLocalRepository(string owner, string repositoryName)
         {
             Repository repo;
