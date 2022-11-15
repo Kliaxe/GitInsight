@@ -19,45 +19,75 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}")]
-        public async Task<IEnumerable<DateCount>> Get(string owner, string repositoryName)
+        public async Task<ActionResult<IEnumerable<DateCount>>> Get(string owner, string repositoryName)
         {
-                var repo = GetLocalRepository(owner, repositoryName);
-                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-                return repoInsight.GetCommitHistory();
+            await Task.Yield();
+            (var repo, bool exists) = GetLocalRepository(owner, repositoryName);
+            if (!exists)
+            {
+                return NotFound();
+            }
+            IGitRepoInsight repoInsight = GetRepoInsight(repo);            
+            return Ok(repoInsight.GetCommitHistory());
         }
 
         [HttpGet("{owner}/{repositoryName}/{user}")]
-        public async Task<IEnumerable<UserDateCounts>> Get(string owner, string repositoryName, string user)
+        public async Task<ActionResult<IEnumerable<UserDateCounts>>> Get(string owner, string repositoryName, string user)
         {
+            await Task.Yield();
             if (user == "user")
             {
-                var repo = GetLocalRepository(owner, repositoryName);
-                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+                (var repo, bool exists) = GetLocalRepository(owner, repositoryName);
+                if (!exists)
+                {
+                    return NotFound();
+                }
+                IGitRepoInsight repoInsight = GetRepoInsight(repo);
                 var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
-                return testFormat;
+                return Ok(testFormat);
             }
-            return null;
+            return BadRequest();
         }
 
-        private IRepository GetLocalRepository(string owner, string repositoryName)
+        private (IRepository, bool) GetLocalRepository(string owner, string repositoryName)
         {
             Repository repo;
             string path = directory + $"/{owner}_{repositoryName}";
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             if (!Repository.IsValid(path))
             {
-                Directory.CreateDirectory(path);
                 string remoteUrl = $"https://github.com/{owner}/{repositoryName}";
+                var references = Repository.ListRemoteReferences(remoteUrl);
+                if (references == null)
+                {
+                    return (null, false)!;
+                }
+                Directory.CreateDirectory(path);
                 Repository.Clone(remoteUrl, path, new CloneOptions());
                 repo = new Repository(path);
             }
             else
             {
                 repo = new Repository(path);
-                var result = Commands.Pull(repo, new Signature("GitInsight", "none", DateTime.Now), new PullOptions { });
-                Console.WriteLine(result.Status);
+                Commands.Pull(repo, new Signature("GitInsight", "none", DateTime.Now), new PullOptions { });
             }
-            return repo;
+            return (repo, true);
+        }
+
+        private IGitRepoInsight GetRepoInsight(IRepository repo)
+        {
+            IGitRepoInsight repoInsight;
+            try
+            {
+                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
+                repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, context);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                repoInsight = new GitRepoInsight(repo);
+            }
+            return repoInsight;
         }
     }
 }
