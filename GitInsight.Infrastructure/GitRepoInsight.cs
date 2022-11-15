@@ -35,6 +35,7 @@ public class GitRepoInsight : ILocalGitRepoInsight
     public async Task<IEnumerable<string>> GetForks()
     {
         var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("GitInsight"));
+        client.Credentials = new Octokit.Credentials("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");
         var (owner, name) = repo.OwnerAndName();
         var response = await client.Repository.Forks.GetAll(owner, name);
         return response.Select(a => a.FullName);

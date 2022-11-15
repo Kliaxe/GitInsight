@@ -18,15 +18,11 @@ else if (false)
 }
 else
 {
-         <div class="col-md-4">
-                <RadzenCard>
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" class="mb-0">Data-binding to Employees</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body2" class="mb-2">Data from a single self-referencing table.</RadzenText>
-                    <RadzenTree Data=@forks Style="height: 300px">
-                            <RadzenTreeLevel TextProperty="Fullname"/>
-                    </RadzenTree>
-                </RadzenCard>
-            </div>
+             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" class="mb-0">Data-binding to Employees</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" class="mb-2">Data from a single self-referencing table.</RadzenText>
+                        <RadzenTree Data=@forks>
+                                <RadzenTreeLevel TextProperty="Fullname"/>
+                        </RadzenTree>
 }
 
 @code {
@@ -35,7 +31,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-            forks = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.Forks;
+            forks = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.Forks.OrderBy(x => x.Fullname);
         }
     }
 }
