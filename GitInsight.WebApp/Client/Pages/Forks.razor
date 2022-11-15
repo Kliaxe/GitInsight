@@ -42,7 +42,6 @@ else
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
             forks = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.Forks.OrderBy(x => x.Fullname);
-            Console.WriteLine(forks.First(f => f.Fullname.Contains("Divi")).ChildForks.Count());
         }
     }
 }
