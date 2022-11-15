@@ -1,4 +1,5 @@
 ﻿using GitInsight.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -27,7 +28,7 @@ namespace GitInsight.Server.Tests.Controllers
         {
             var expected = new List<DateCount>() { new DateCount(new DateTime(2022, 10, 4), 1) };
             var result = await _controller.Get(_gitOwner, _gitRepositoryName);
-            result.Should().NotBeEquivalentTo(expected);
+            result.Value.Should().NotBeEquivalentTo(expected);
         }
 
         [Fact]
@@ -46,7 +47,7 @@ namespace GitInsight.Server.Tests.Controllers
             };
 
             var result = await _controller.Get(_gitOwner, _gitRepositoryName);
-            result.Should().BeEquivalentTo(expected);
+            result.Value.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
@@ -57,7 +58,7 @@ namespace GitInsight.Server.Tests.Controllers
                 new List<DateCount>() { new DateCount(new DateTime(0198, 10, 4), 1) })
             };
             var result = await _controller.Get(_gitOwner, _gitRepositoryName, "user");
-            result.Should().NotBeEquivalentTo(expected);
+            result.Value.Should().NotBeEquivalentTo(expected);
         }
 
         [Fact]
@@ -99,9 +100,16 @@ namespace GitInsight.Server.Tests.Controllers
                 ),
             };
 
-            // Just take first 4
             var result = await _controller.Get(_gitOwner, _gitRepositoryName, "user");
-            result.Take(4).Should().BeEquivalentTo(expected);
+            // Just take first 4
+            result.Value!.Take(4).Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task Get_With_Non_Existing_Url()
+        {
+            var result = await _controller.Get("AABBCC", "DDEEFF", "user");
+            result.Should().BeAssignableTo<NotFoundResult>();
         }
     }
 }

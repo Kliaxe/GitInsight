@@ -27,7 +27,7 @@ namespace GitInsight.WebApp.Server.Controllers
             {
                 return NotFound();
             }
-            IGitRepoInsight repoInsight = GetRepoInsight(repo);            
+            IGitRepoInsight repoInsight = GetRepoInsight(repo);
             return Ok(repoInsight.GetCommitHistory());
         }
 
@@ -56,15 +56,19 @@ namespace GitInsight.WebApp.Server.Controllers
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             if (!Repository.IsValid(path))
             {
+                Directory.CreateDirectory(path);
                 string remoteUrl = $"https://github.com/{owner}/{repositoryName}";
-                var references = Repository.ListRemoteReferences(remoteUrl);
-                if (references == null)
+                try
                 {
+                    Repository.Clone(remoteUrl, path, new CloneOptions());
+                    repo = new Repository(path);
+                }
+                catch (Exception e)
+                {
+                    Directory.Delete(path);
+                    Console.WriteLine(e.Message);
                     return (null, false)!;
                 }
-                Directory.CreateDirectory(path);
-                Repository.Clone(remoteUrl, path, new CloneOptions());
-                repo = new Repository(path);
             }
             else
             {
