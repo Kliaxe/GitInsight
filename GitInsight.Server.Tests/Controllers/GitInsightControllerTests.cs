@@ -1,4 +1,5 @@
 ﻿using GitInsight.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -23,12 +24,7 @@ namespace GitInsight.Server.Tests.Controllers
         }
 
         [Fact]
-        public async Task Get_NonExisting()
-        {
-            var expected = new List<DateCount>() { new DateCount(new DateTime(2022, 10, 4), 1) };
-            var result = await _controller.Get(_gitOwner, _gitRepositoryName);
-            result.Value!.DateCounts.Should().NotBeEquivalentTo(expected);
-        }
+        public async Task Get_NonExisting() => (await _controller.Get("abcd", "abcd")).Result.Should().BeAssignableTo<NotFoundResult>();
 
         [Fact]
         public async Task Get_Existing()
@@ -47,17 +43,6 @@ namespace GitInsight.Server.Tests.Controllers
 
             var result = await _controller.Get(_gitOwner, _gitRepositoryName);
             result.Value!.DateCounts.Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
-        public async Task Get_User_NonExisting()
-        {
-            var expected = new List<UserDateCounts>() { 
-                new UserDateCounts(new User("Test", "Test@github.com"),
-                new List<DateCount>() { new DateCount(new DateTime(0198, 10, 4), 1) })
-            };
-            var result = await _controller.Get(_gitOwner, _gitRepositoryName);
-            result.Value!.UserDateCounts.Should().NotBeEquivalentTo(expected);
         }
 
         [Fact]

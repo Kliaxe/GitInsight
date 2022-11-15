@@ -21,8 +21,12 @@ namespace GitInsight.WebApp.Server.Controllers
         [HttpGet("{owner}/{repositoryName}")]
         public async Task<ActionResult<RepoAnalysis>> Get(string owner, string repositoryName)
         {
-            var repo = GetLocalRepository(owner, repositoryName);
-            IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+            var (repo, exists) = GetLocalRepository(owner, repositoryName);
+            if (!exists)
+            {
+                return NotFound();
+            }
+            IGitRepoInsight repoInsight = GetRepoInsight(repo);
 
             var dateCounts = repoInsight.GetCommitHistory();
             var userDateCounts = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
@@ -49,7 +53,7 @@ namespace GitInsight.WebApp.Server.Controllers
         //}
 
 
-        private IRepository GetLocalRepository(string owner, string repositoryName)
+        private (IRepository, bool) GetLocalRepository(string owner, string repositoryName)
         {
             Repository repo;
             string path = directory + $"/{owner}_{repositoryName}";
@@ -58,8 +62,16 @@ namespace GitInsight.WebApp.Server.Controllers
             {
                 Directory.CreateDirectory(path);
                 string remoteUrl = $"https://github.com/{owner}/{repositoryName}";
-                Repository.Clone(remoteUrl, path, new CloneOptions());
-                repo = new Repository(path);
+                try
+                {
+                    Repository.Clone(remoteUrl, path, new CloneOptions());
+                    repo = new Repository(path);
+                }
+                catch (Exception e)
+                {
+                    Directory.Delete(path);
+                    return (null!, false);
+                }
             }
             else
             {
@@ -67,7 +79,20 @@ namespace GitInsight.WebApp.Server.Controllers
                 var result = Commands.Pull(repo, new Signature("GitInsight", "none", DateTime.Now), new PullOptions { });
                 Console.WriteLine(result.Status);
             }
-            return repo;
+            return (repo, true);
+        }
+
+        private IGitRepoInsight GetRepoInsight(IRepository repo)
+        {
+            try
+            {
+                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
+                return GitInsightRepoFactory.CreateRepoInsight(repo, context);
+            }
+            catch (Exception e)
+            {
+                return new GitRepoInsight(repo);
+            }
         }
     }
 }
