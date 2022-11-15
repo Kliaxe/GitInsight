@@ -19,7 +19,7 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}")]
-        public async Task<RepoAnalysis> Get(string owner, string repositoryName)
+        public async Task<ActionResult<RepoAnalysis>> Get(string owner, string repositoryName)
         {
             var repo = GetLocalRepository(owner, repositoryName);
             IGitRepoInsight repoInsight = new GitRepoInsight(repo);
