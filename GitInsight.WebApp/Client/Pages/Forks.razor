@@ -21,7 +21,7 @@ else
      <RadzenTree>
          @foreach(Fork fork in forks){
             if (fork.ChildForks.Count() > 0){
-                   <RadzenTreeItem Text="@fork.Fullname">
+                   <RadzenTreeItem Text="@fork.Fullname" Expanded="true">
                     @foreach (Fork childFork in fork.ChildForks)
                     {
                             <RadzenTreeItem Text="@childFork.Fullname" />
