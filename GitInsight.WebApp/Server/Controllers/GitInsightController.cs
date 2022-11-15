@@ -19,27 +19,41 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}")]
-        public async Task<IEnumerable<DateCount>> Get(string owner, string repositoryName)
+        public async Task<ActionResult<RepoAnalysis>> Get(string owner, string repositoryName)
         {
-                var repo = GetLocalRepository(owner, repositoryName);
-                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-                return repoInsight.GetCommitHistory();
-        }
-
-        [HttpGet("{owner}/{repositoryName}/{user}")]
-        public async Task<IEnumerable<UserDateCounts>> Get(string owner, string repositoryName, string user)
-        {
-            if (user == "user")
+            var (repo, exists) = GetLocalRepository(owner, repositoryName);
+            if (!exists)
             {
-                var repo = GetLocalRepository(owner, repositoryName);
-                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-                var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
-                return testFormat;
+                return NotFound();
             }
-            return null;
+            IGitRepoInsight repoInsight = GetRepoInsight(repo);
+
+            var dateCounts = repoInsight.GetCommitHistory();
+            var userDateCounts = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
+            var forks = (await repoInsight.GetForks()).Select(f => new Fork(f));
+
+            return new RepoAnalysis(dateCounts, userDateCounts, forks);
         }
 
-        private IRepository GetLocalRepository(string owner, string repositoryName)
+        //[HttpGet("{owner}/{repositoryName}/{user}")]
+        //public async Task<(IEnumerable<UserDateCounts>, IEnumerable<string>)> Get(string owner, string repositoryName, string user)
+        //{
+        //    if (user is null)
+        //    {
+
+        //    }
+        //    else if (user == "user")
+        //    {
+        //        var repo = GetLocalRepository(owner, repositoryName);
+        //        IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+        //        var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
+        //        return (testFormat, await repoInsight.GetForks());
+        //    }
+        //    return (null, null);
+        //}
+
+
+        private (IRepository, bool) GetLocalRepository(string owner, string repositoryName)
         {
             Repository repo;
             string path = directory + $"/{owner}_{repositoryName}";
@@ -48,8 +62,16 @@ namespace GitInsight.WebApp.Server.Controllers
             {
                 Directory.CreateDirectory(path);
                 string remoteUrl = $"https://github.com/{owner}/{repositoryName}";
-                Repository.Clone(remoteUrl, path, new CloneOptions());
-                repo = new Repository(path);
+                try
+                {
+                    Repository.Clone(remoteUrl, path, new CloneOptions());
+                    repo = new Repository(path);
+                }
+                catch (Exception e)
+                {
+                    Directory.Delete(path);
+                    return (null!, false);
+                }
             }
             else
             {
@@ -57,7 +79,20 @@ namespace GitInsight.WebApp.Server.Controllers
                 var result = Commands.Pull(repo, new Signature("GitInsight", "none", DateTime.Now), new PullOptions { });
                 Console.WriteLine(result.Status);
             }
-            return repo;
+            return (repo, true);
+        }
+
+        private IGitRepoInsight GetRepoInsight(IRepository repo)
+        {
+            try
+            {
+                var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
+                return GitInsightRepoFactory.CreateRepoInsight(repo, context);
+            }
+            catch (Exception e)
+            {
+                return new GitRepoInsight(repo);
+            }
         }
     }
 }
