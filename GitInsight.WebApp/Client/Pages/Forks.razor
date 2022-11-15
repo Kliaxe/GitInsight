@@ -12,17 +12,27 @@
 @if (InputData.NameOfOwner == null){
     <p><em>Please fill in the information on the setup page...</em></p>
 }
-else if (false)
+else if (forks is null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" class="mb-0">Data-binding to Employees</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body2" class="mb-2">Data from a single self-referencing table.</RadzenText>
-                        <RadzenTree Data=@forks>
-                                <RadzenTreeLevel TextProperty="Fullname"/>
-                        </RadzenTree>
+     <RadzenTree>
+         @foreach(Fork fork in forks){
+            if (fork.ChildForks.Count() > 0){
+                   <RadzenTreeItem Text="@fork.Fullname">
+                    @foreach (Fork childFork in fork.ChildForks)
+                    {
+                            <RadzenTreeItem Text="@childFork.Fullname" />
+                    }
+                   </RadzenTreeItem>
+            }
+            else{
+                   <RadzenTreeItem Text="@fork.Fullname" />
+            }
+         }
+     </RadzenTree>
 }
 
 @code {
@@ -32,6 +42,7 @@ else
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
             forks = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.Forks.OrderBy(x => x.Fullname);
+            Console.WriteLine(forks.First(f => f.Fullname.Contains("Divi")).ChildForks.Count());
         }
     }
 }

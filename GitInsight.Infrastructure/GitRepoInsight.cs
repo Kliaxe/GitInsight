@@ -46,9 +46,11 @@ public class GitRepoInsight : ILocalGitRepoInsight
 
     private async Task<IEnumerable<Fork>> GetForkRecursive(Octokit.Repository repo)
     {
+        string owner = repo.FullName.Split("/")[0];
+        string name = repo.FullName.Split("/")[1];
         if (repo.ForksCount == 0) return new List<Fork>();
 
-        var forks = await client.Repository.Forks.GetAll(repo.Owner.Name, repo.Name);
+        var forks = await client.Repository.Forks.GetAll(owner, name);
         return forks.Select(async r => new Fork(r.FullName, await GetForkRecursive(r))).Select(t => t.Result);
     }
 }
