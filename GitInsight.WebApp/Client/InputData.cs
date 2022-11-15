@@ -1,4 +1,6 @@
-﻿namespace GitInsight.WebApp.Client
+﻿using Microsoft.AspNetCore.Components;
+
+namespace GitInsight.WebApp.Client
 {
     public static class InputData
     {
