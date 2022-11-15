@@ -19,25 +19,34 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}")]
-        public async Task<IEnumerable<DateCount>> Get(string owner, string repositoryName)
+        public async Task<RepoAnalysis> Get(string owner, string repositoryName)
         {
-                var repo = GetLocalRepository(owner, repositoryName);
-                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-                return repoInsight.GetCommitHistory();
+            var repo = GetLocalRepository(owner, repositoryName);
+            IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+
+            var dateCounts = repoInsight.GetCommitHistory();
+            var userDateCounts = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
+            var forks = (await repoInsight.GetForks()).Select(f => new Fork(f));
+
+            return new RepoAnalysis(dateCounts, userDateCounts, forks);
         }
 
-        [HttpGet("{owner}/{repositoryName}/{user}")]
-        public async Task<IEnumerable<UserDateCounts>> Get(string owner, string repositoryName, string user)
-        {
-            if (user == "user")
-            {
-                var repo = GetLocalRepository(owner, repositoryName);
-                IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-                var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
-                return testFormat;
-            }
-            return null;
-        }
+        //[HttpGet("{owner}/{repositoryName}/{user}")]
+        //public async Task<(IEnumerable<UserDateCounts>, IEnumerable<string>)> Get(string owner, string repositoryName, string user)
+        //{
+        //    if (user is null)
+        //    {
+
+        //    }
+        //    else if (user == "user")
+        //    {
+        //        var repo = GetLocalRepository(owner, repositoryName);
+        //        IGitRepoInsight repoInsight = new GitRepoInsight(repo);
+        //        var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
+        //        return (testFormat, await repoInsight.GetForks());
+        //    }
+        //    return (null, null);
+        //}
 
 
         private IRepository GetLocalRepository(string owner, string repositoryName)
