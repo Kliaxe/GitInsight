@@ -9,14 +9,16 @@ namespace GitInsight.Infrastructure;
 public class GitRepoInsight : ILocalGitRepoInsight
 {
     private readonly IRepository repo;
+    private Octokit.IGitHubClient client;
 
     public string Name => repo.Name();
     public string Url => repo.Url();
     public DateTimeOffset Version => repo.Version();
 
-    public GitRepoInsight(IRepository repo)
+    public GitRepoInsight(IRepository repo, Octokit.IGitHubClient client)
     {
         this.repo = repo;
+        this.client = client;
     }
 
     public IEnumerable<DateCount> GetCommitHistory()
@@ -35,14 +37,11 @@ public class GitRepoInsight : ILocalGitRepoInsight
 
     public async Task<IEnumerable<Fork>> GetForks()
     {
-        client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("GitInsight"));
         var (owner, name) = repo.OwnerAndName();
         var forks = await client.Repository.Forks.GetAll(owner, name);
 
         return forks.Select(async r => new Fork(r.FullName, await GetForkRecursive(r))).Select(t => t.Result);
     }
-
-    Octokit.GitHubClient client;
 
     private async Task<IEnumerable<Fork>> GetForkRecursive(Octokit.Repository repo)
     {

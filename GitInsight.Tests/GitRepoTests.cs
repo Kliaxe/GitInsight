@@ -1,3 +1,6 @@
+using System;
+using System.Security.Policy;
+
 namespace GitInsight.Tests;
 
 public class GitRepoTests
@@ -35,7 +38,17 @@ public class GitRepoTests
         repo.Commits.Returns(querylog);
 
 
-        repoInsight = new GitRepoInsight(repo);
+        var network = Substitute.For<Network>();
+        var remotes = Substitute.For<RemoteCollection>();
+        var remote = Substitute.For<Remote>();
+
+        repo.Network.Returns(network);
+        network.Remotes.Returns(remotes);
+        remotes.GetEnumerator().Returns(new List<Remote>() { remote }.GetEnumerator());
+        remote.Url.Returns("https://github.com/itu-bdsa/project-description");
+
+
+        repoInsight = new GitRepoInsight(repo, GitHubClient.Client);
     }
 
     [Fact]
@@ -73,5 +86,13 @@ public class GitRepoTests
         };
         var actual = repoInsight.GetCommitHistoryByUser();
         actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public async Task GetForks()
+    {
+        var forks = await repoInsight.GetForks();
+
+        forks.Should().Contain("Lukski175/project-description");
     }
 }

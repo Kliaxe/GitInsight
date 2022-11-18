@@ -87,11 +87,12 @@ namespace GitInsight.WebApp.Server.Controllers
             try
             {
                 var context = new GitInsightContextFactory().CreateDbContext(Array.Empty<string>());
-                return GitInsightRepoFactory.CreateRepoInsight(repo, context);
+
+                return GitInsightRepoFactory.CreateRepoInsight(repo, context, GitHubClient.Client);
             }
             catch (Exception e)
             {
-                return new GitRepoInsight(repo);
+                return new GitRepoInsight(repo, GitHubClient.Client);
             }
         }
     }
