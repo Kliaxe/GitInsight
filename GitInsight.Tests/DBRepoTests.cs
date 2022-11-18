@@ -2,7 +2,7 @@
 {
     public class DBRepoTests : IDisposable
     {
-        private readonly DBRepoInsight _repository;
+        private readonly DBRepoInsight _repoInsight;
         private readonly GitInsightContext _context;
 
         public DBRepoTests()
@@ -25,7 +25,7 @@
             UserDateCount u6 = new() { Count = 5, Date = DateTime.Now.Date.AddDays(1), Email = "adrian@kari.dk", UserName = "Adrian", GitRepoId = repo2.Id };
             _context.UserDateCounts.AddRange(u1, u2, u3, u4, u5, u6);
             _context.SaveChanges();
-            _repository = new DBRepoInsight(repo1);
+            _repoInsight = new DBRepoInsight(repo1);
         }
 
         [Fact]
@@ -37,7 +37,7 @@
                 new(DateTime.Now.Date.AddDays(3), 9),
             };
 
-            var actual = _repository.GetCommitHistory();
+            var actual = _repoInsight.GetCommitHistory();
             actual.Should().BeEquivalentTo(expected);
         }
 
@@ -73,9 +73,15 @@
                 )
             };
 
-            var actual = _repository.GetCommitHistoryByUser();
+            var actual = _repoInsight.GetCommitHistoryByUser();
 
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task GetForks()
+        {
+
         }
 
         public void Dispose() => _context.Dispose();

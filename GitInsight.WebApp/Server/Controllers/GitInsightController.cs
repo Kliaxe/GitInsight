@@ -1,8 +1,7 @@
-using GitInsight.WebApp.Shared;
 using GitInsight.Infrastructure;
+using GitInsight.Database;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 
 namespace GitInsight.WebApp.Server.Controllers
 {
@@ -34,24 +33,6 @@ namespace GitInsight.WebApp.Server.Controllers
 
             return new RepoAnalysis(dateCounts, userDateCounts, forks);
         }
-
-        //[HttpGet("{owner}/{repositoryName}/{user}")]
-        //public async Task<(IEnumerable<UserDateCounts>, IEnumerable<string>)> Get(string owner, string repositoryName, string user)
-        //{
-        //    if (user is null)
-        //    {
-
-        //    }
-        //    else if (user == "user")
-        //    {
-        //        var repo = GetLocalRepository(owner, repositoryName);
-        //        IGitRepoInsight repoInsight = new GitRepoInsight(repo);
-        //        var testFormat = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
-        //        return (testFormat, await repoInsight.GetForks());
-        //    }
-        //    return (null, null);
-        //}
-
 
         private (IRepository, bool) GetLocalRepository(string owner, string repositoryName)
         {
@@ -90,7 +71,7 @@ namespace GitInsight.WebApp.Server.Controllers
 
                 return GitInsightRepoFactory.CreateRepoInsight(repo, context, GitHubClient.Client);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new GitRepoInsight(repo, GitHubClient.Client);
             }

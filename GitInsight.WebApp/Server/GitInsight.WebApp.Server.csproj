@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GitInsight.Database\GitInsight.Database.csproj" />
     <ProjectReference Include="..\..\GitInsight.Infrastructure\GitInsight.Infrastructure.csproj" />
     <ProjectReference Include="..\Client\GitInsight.WebApp.Client.csproj" />
-    <ProjectReference Include="..\Shared\GitInsight.WebApp.Shared.csproj" />
   </ItemGroup>
 
 

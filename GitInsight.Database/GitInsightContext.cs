@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace GitInsight.Infrastructure
+namespace GitInsight.Database
 {
     public sealed class GitInsightContext : DbContext
     {

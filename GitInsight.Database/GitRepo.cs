@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GitInsight.Infrastructure
+namespace GitInsight.Database
 {
     public class GitRepo
     {

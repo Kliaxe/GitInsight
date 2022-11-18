@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GitInsight.Infrastructure
+namespace GitInsight.Database
 {
     public class UserDateCount
     {

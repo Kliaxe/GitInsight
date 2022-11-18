@@ -1,5 +1,7 @@
 ﻿namespace GitInsight;
-using Repository = LibGit2Sharp.Repository;
+using GitInsight.Infrastructure;
+using GitInsight.Database;
+using LibGit2Sharp;
 
 public class Program
 {

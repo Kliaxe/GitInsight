@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.WebApp.Server", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.WebApp.Client", "GitInsight.WebApp\Client\GitInsight.WebApp.Client.csproj", "{69A91E7B-FD88-42EB-A833-9892CF6D7C7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.WebApp.Shared", "GitInsight.WebApp\Shared\GitInsight.WebApp.Shared.csproj", "{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.Server.Tests", "GitInsight.Server.Tests\GitInsight.Server.Tests.csproj", "{696644B3-4929-41D7-A6F3-E26F189C6488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitInsight.Server.Tests", "GitInsight.Server.Tests\GitInsight.Server.Tests.csproj", "{696644B3-4929-41D7-A6F3-E26F189C6488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitInsight.Database", "GitInsight.Database\GitInsight.Database.csproj", "{962F76F1-68E0-4BFD-BBA7-F3AA725FF766}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +43,14 @@ Global
 		{69A91E7B-FD88-42EB-A833-9892CF6D7C7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69A91E7B-FD88-42EB-A833-9892CF6D7C7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69A91E7B-FD88-42EB-A833-9892CF6D7C7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25FCB6F4-D02B-45C8-84C6-C3873948ECD4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{696644B3-4929-41D7-A6F3-E26F189C6488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{696644B3-4929-41D7-A6F3-E26F189C6488}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{696644B3-4929-41D7-A6F3-E26F189C6488}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{696644B3-4929-41D7-A6F3-E26F189C6488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{962F76F1-68E0-4BFD-BBA7-F3AA725FF766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{962F76F1-68E0-4BFD-BBA7-F3AA725FF766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{962F76F1-68E0-4BFD-BBA7-F3AA725FF766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{962F76F1-68E0-4BFD-BBA7-F3AA725FF766}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

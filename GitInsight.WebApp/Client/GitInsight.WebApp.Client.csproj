@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\GitInsight.Infrastructure\GitInsight.Infrastructure.csproj" />
-    <ProjectReference Include="..\Shared\GitInsight.WebApp.Shared.csproj" />
   </ItemGroup>
 
 </Project>
