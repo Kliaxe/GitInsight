@@ -9,41 +9,43 @@
 
 @inject HttpClient Http
 
-@if (InputData.NameOfOwner == null){
-    <p><em>Please fill in the information on the home page...</em></p>
+@if (InputData.NameOfOwner == null)
+{
+		<p><em>Please fill in the information on the setup page...</em></p>
 }
 else if (dateCounts == null)
 {
-    <p><em>Loading...</em></p>
+		<p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Count</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (DateCount datecount in dateCounts)
-            {
-                <tr>
-                    <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
-                    <td>@datecount.Count</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Count</th>
+				</tr>
+			</thead>
+			<tbody>
+			@foreach (DateCount datecount in dateCounts.Reverse())
+			{
+						<tr>
+							<td>@datecount.Date.ToString("dd/MM/yyyy")</td>
+							<td>@datecount.Count</td>
+						</tr>
+			}
+			</tbody>
+		</table>
 }
 
 @code {
-    private DateCount[]? dateCounts;
+	private IEnumerable<DateCount>? dateCounts;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-            dateCounts = await Http.GetFromJsonAsync<DateCount[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository);
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		if (InputData.NameOfOwner is not null || InputData.NameOfRepository is not null)
+		{
+			dateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.DateCounts;
+		}
+	}
 }

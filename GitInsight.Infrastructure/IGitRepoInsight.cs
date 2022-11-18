@@ -15,6 +15,6 @@ namespace GitInsight.Infrastructure
 
         IEnumerable<(User, IEnumerable<DateCount>)> GetCommitHistoryByUser();
 
-        Task<IEnumerable<string>> GetForks();
+        Task<IEnumerable<Fork>> GetForks();
     }
 }

@@ -30,7 +30,7 @@ namespace GitInsight.WebApp.Server.Controllers
 
             var dateCounts = repoInsight.GetCommitHistory();
             var userDateCounts = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
-            var forks = (await repoInsight.GetForks()).Select(f => new Fork(f));
+            var forks = (await repoInsight.GetForks());
 
             return new RepoAnalysis(dateCounts, userDateCounts, forks);
         }

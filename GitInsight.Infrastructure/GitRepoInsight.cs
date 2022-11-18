@@ -35,10 +35,21 @@ public class GitRepoInsight : ILocalGitRepoInsight
         return commits.GroupBy(c => c.Author.When.Date).Select(g => new DateCount(g.Key, g.Count()));
     }
 
-    public async Task<IEnumerable<string>> GetForks()
+    public async Task<IEnumerable<Fork>> GetForks()
     {
         var (owner, name) = repo.OwnerAndName();
-        var response = await client.Repository.Forks.GetAll(owner, name);
-        return response.Select(a => a.FullName);
+        var forks = await client.Repository.Forks.GetAll(owner, name);
+
+        return forks.Select(async r => new Fork(r.FullName, await GetForkRecursive(r))).Select(t => t.Result);
+    }
+
+    private async Task<IEnumerable<Fork>> GetForkRecursive(Octokit.Repository repo)
+    {
+        string owner = repo.FullName.Split("/")[0];
+        string name = repo.FullName.Split("/")[1];
+        if (repo.ForksCount == 0) return new List<Fork>();
+
+        var forks = await client.Repository.Forks.GetAll(owner, name);
+        return forks.Select(async r => new Fork(r.FullName, await GetForkRecursive(r))).Select(t => t.Result);
     }
 }
