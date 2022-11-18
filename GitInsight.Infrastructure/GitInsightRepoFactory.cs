@@ -23,7 +23,7 @@ namespace GitInsight.Infrastructure
             else
             {
                 var localRepo = new GitRepoInsight(repo, client);
-                insightRepository.UpdateInsight(localRepo);
+                _ = insightRepository.UpdateInsight(localRepo);
                 return localRepo;
             }
         }

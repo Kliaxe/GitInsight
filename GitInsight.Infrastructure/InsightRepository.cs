@@ -28,7 +28,7 @@ namespace GitInsight.Infrastructure
             return (false, null!);
         }
 
-        public void UpdateInsight(ILocalGitRepoInsight repoInsight)
+        public async Task UpdateInsight(ILocalGitRepoInsight repoInsight)
         {
             var gitRepo = context.Repositories.FirstOrDefault(r => r.Url == repoInsight.Url);
             if (gitRepo != null)
@@ -37,8 +37,19 @@ namespace GitInsight.Infrastructure
             }
             else
             {
-                AddNewInsight(repoInsight);
+                gitRepo = AddNewInsight(repoInsight);
             }
+            await UpdateForks(gitRepo, repoInsight);
+        }
+
+        private async Task UpdateForks(GitRepo gitRepo, ILocalGitRepoInsight repoInsight)
+        {
+            var forks = await repoInsight.GetForks();
+            foreach (var forkDTO in forks)
+            {
+                AddForkRecursive(forkDTO, null, gitRepo);
+            }
+            context.SaveChanges();
         }
 
         private void UpdateExsistingInsight(GitRepo gitRepo, ILocalGitRepoInsight repoInsight)
@@ -68,7 +79,7 @@ namespace GitInsight.Infrastructure
             context.SaveChanges();
         }
 
-        private void AddNewInsight(ILocalGitRepoInsight repoInsight)
+        private GitRepo AddNewInsight(ILocalGitRepoInsight repoInsight)
         {
             var gitRepo = new GitRepo { Name = repoInsight.Name, Url = repoInsight.Url, Version = repoInsight.Version};
             context.Repositories.Add(gitRepo);
@@ -82,7 +93,11 @@ namespace GitInsight.Infrastructure
                     AddUserDateCount(gitRepo, user, dateCount);
                 }
             }
+
+            context.SaveChanges();
+            return gitRepo;
         }
+
         private void AddUserDateCount(GitRepo gitRepo, User user, DateCount dateCount)
         {
             var udc = new UserDateCount
@@ -94,6 +109,25 @@ namespace GitInsight.Infrastructure
                 Count = dateCount.Count
             };
             context.UserDateCounts.Add(udc);
+        }
+
+        private void AddForkRecursive(ForkDTO forkDTO, Fork? parent, GitRepo gitRepo)
+        {
+            var fork = gitRepo.Forks?.FirstOrDefault(f => f.Name == forkDTO.Fullname);
+            if (fork == null)
+            {
+                fork = new Fork
+                {
+                    Name = forkDTO.Fullname,
+                    GitRepoId = gitRepo.Id,
+                    Parent = parent
+                };
+                context.Add(fork);
+            }
+            foreach (var child in forkDTO.ChildForks)
+            {
+                AddForkRecursive(child, fork, gitRepo);
+            }
         }
     }
 }

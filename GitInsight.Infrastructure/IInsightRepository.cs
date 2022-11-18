@@ -11,6 +11,6 @@ namespace GitInsight.Infrastructure
     {
         (bool, GitRepo) HasUpToDateInsight(IRepository repo);
 
-        void UpdateInsight(ILocalGitRepoInsight gitRepoInsight);
+        Task UpdateInsight(ILocalGitRepoInsight gitRepoInsight);
     }
 }
