@@ -19,7 +19,9 @@ namespace GitInsight.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Fork>()
+                .HasOne(e => e.Parent)
+                .WithMany(e => e.Children);
         }
     }
 }

@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Database
 {
-    public class GitRepo
+    public class Fork
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Url { get; set; }
-        public DateTimeOffset Version { get; set; }
-
-        public ICollection<UserDateCount> UserDateCounts { get; set; }
-
-        public ICollection<Fork> Forks { get; set; }
+        public int GitRepoId { get; set; }
+        public int? ParentId { get; set; }
+        public Fork? Parent { get; set; }
+        public ICollection<Fork> Children { get; set; }
     }
 }
