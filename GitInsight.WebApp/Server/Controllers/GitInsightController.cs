@@ -48,9 +48,9 @@ namespace GitInsight.WebApp.Server.Controllers
                     Repository.Clone(remoteUrl, path, new CloneOptions());
                     repo = new Repository(path);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Directory.Delete(path);
+                    Directory.Delete(path, true);
                     return (null!, false);
                 }
             }
