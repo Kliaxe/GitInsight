@@ -18,10 +18,10 @@ else if (forks is null)
 else
 {
      <RadzenTree>
-         @foreach(Fork fork in forks){
+         @foreach(ForkDTO fork in forks){
             if (fork.ChildForks.Count() > 0){
                    <RadzenTreeItem Text="@fork.Fullname" Expanded="true">
-                    @foreach (Fork childFork in fork.ChildForks)
+                    @foreach (ForkDTO childFork in fork.ChildForks)
                     {
                             <RadzenTreeItem Text="@childFork.Fullname" />
                     }
@@ -35,7 +35,7 @@ else
 }
 
 @code {
-    private IEnumerable<Fork>? forks;
+    private IEnumerable<ForkDTO>? forks;
 
     protected override async Task OnInitializedAsync()
     {
