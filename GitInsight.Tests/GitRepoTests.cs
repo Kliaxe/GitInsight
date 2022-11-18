@@ -93,6 +93,6 @@ public class GitRepoTests
     {
         var forks = await repoInsight.GetForks();
 
-        forks.Should().Contain("Lukski175/project-description");
+        forks.Should().Contain(f => f.Fullname == "Lukski175/project-description");
     }
 }
