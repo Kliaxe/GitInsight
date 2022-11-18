@@ -25,7 +25,7 @@ namespace GitInsight.Tests
             _context.Database.EnsureCreated();
             _context.SaveChanges();
             repo = fixture.repo;
-            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context);
+            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace GitInsight.Tests
         [Fact]
         public void DBRepoInsightTest()
         {
-            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context);
+            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
 
             var formatter = new Formatter(repoInsight);
             string expected = $"5 26/10/2022";

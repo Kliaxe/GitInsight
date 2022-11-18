@@ -1,0 +1,54 @@
+﻿@page "/commitscharts"
+
+<PageTitle>Commits Charts</PageTitle>
+
+<h1>Commits Per Day Charts</h1>
+
+@using GitInsight.Infrastructure
+
+@inject HttpClient Http
+
+@if (InputData.NameOfOwner == null){
+    <p><em>Please fill in the information on the setup page...</em></p>
+}
+else if (dateCounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else{
+    <RadzenCard Class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
+                    <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
+                    <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
+                    <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                    <RadzenLabel Text="Show Data Labels" For="dataLabels" />
+                </RadzenCard>
+<RadzenChart>
+  <RadzenLineSeries Smooth="@smooth" Data="@dataItems" CategoryProperty="Date" ValueProperty="CommitCount" Title="Number of commits">
+      <RadzenMarkers MarkerType="MarkerType.Circle" />
+      <RadzenSeriesDataLabels Visible="@showDataLabels" />
+  </RadzenLineSeries>
+</RadzenChart>
+}
+
+@code {
+    bool showDataLabels = false;
+    bool smooth = false;
+
+    IEnumerable<DataItem> dataItems = Array.Empty<DataItem>();
+
+    class DataItem
+    {
+        public string Date { get; set; }
+        public double CommitCount { get; set; }
+    }
+
+    private IEnumerable<DateCount> dateCounts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
+            dateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).DateCounts;
+            dataItems = dateCounts.Select(x => new DataItem() { CommitCount = x.Count, Date = x.Date.ToString("dd/MM/yyyy") }).Reverse();
+        }
+    }
+}

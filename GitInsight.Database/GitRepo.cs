@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GitInsight.Infrastructure
+namespace GitInsight.Database
 {
     public class GitRepo
     {
@@ -14,5 +14,7 @@ namespace GitInsight.Infrastructure
         public DateTimeOffset Version { get; set; }
 
         public ICollection<UserDateCount> UserDateCounts { get; set; }
+
+        public ICollection<Fork> Forks { get; set; }
     }
 }

@@ -5,12 +5,11 @@
 <h1>Commits Per Day By User</h1>
 
 @using GitInsight.Infrastructure
-@using GitInsight.WebApp.Shared
 
 @inject HttpClient Http
 
 @if (InputData.NameOfOwner == null){
-    <p><em>Please fill in the information on the home page...</em></p>
+    <p><em>Please fill in the information on the setup page...</em></p>
 }
 else if (UserDateCounts == null)
 {
@@ -37,7 +36,7 @@ else
             </tr>
         </thead>
         <tbody>
-                @foreach (DateCount datecount in userdatecounts.DateCounts)
+                @foreach (DateCount datecount in userdatecounts.DateCounts.Reverse())
                 {
                     <tr>
                         <td>@datecount.Date.ToString("dd/MM/yyyy")</td>
@@ -52,12 +51,12 @@ else
 }
 
 @code {
-    private UserDateCounts[]? UserDateCounts;
+    private IEnumerable<UserDateCounts> UserDateCounts;
 
     protected override async Task OnInitializedAsync()
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-            UserDateCounts = await Http.GetFromJsonAsync<UserDateCounts[]>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository + "/user"); 
+            UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).UserDateCounts; 
         }
     }
 }

@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using GitInsight;
 using LibGit2Sharp;
+using Octokit;
 
 namespace GitInsight.Infrastructure
 {
     public class GitInsightRepoFactory
     {
         
-        public static IGitRepoInsight CreateRepoInsight(IRepository repo, GitInsightContext context)
+        public static IGitRepoInsight CreateRepoInsight(IRepository repo, GitInsightContext context, IGitHubClient client)
         {
             var insightRepository = new InsightRepository(context);
-
             (bool upToDate, var gitRepo) = insightRepository.HasUpToDateInsight(repo);
             if (upToDate)
             {
@@ -22,8 +22,8 @@ namespace GitInsight.Infrastructure
             }
             else
             {
-                var localRepo = new GitRepoInsight(repo);
-                insightRepository.UpdateInsight(localRepo);
+                var localRepo = new GitRepoInsight(repo, client);
+                _ = insightRepository.UpdateInsight(localRepo);
                 return localRepo;
             }
         }
