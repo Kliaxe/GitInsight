@@ -31,9 +31,17 @@ namespace GitInsight.Infrastructure
             return gitRepo.UserDateCounts.GroupBy(c => new { c.Email, c.UserName }).Select(g => (new User(g.Key.UserName, g.Key.Email), g.Select(u => new DateCount(u.Date, u.Count))));
         }
 
-        public Task<IEnumerable<ForkDTO>> GetForks()
+        public async Task<IEnumerable<ForkDTO>> GetForks()
         {
-            throw new NotImplementedException();
+            await Task.Yield();
+            var rootParents = gitRepo.Forks.Where(f => f.Parent == null);
+            return GetForksRecursive(rootParents);
+        }
+
+        private IEnumerable<ForkDTO> GetForksRecursive(IEnumerable<Fork> forks)
+        {
+            if (forks == null) return new List<ForkDTO>();
+            return forks.Select(f => new ForkDTO(f.Name, GetForksRecursive(f.Children)));
         }
     }
 }

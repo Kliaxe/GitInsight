@@ -11,6 +11,7 @@ namespace GitInsight.Database
     {
         public DbSet<GitRepo> Repositories => Set<GitRepo>();
         public DbSet<UserDateCount> UserDateCounts => Set<UserDateCount>();
+        public DbSet<Fork> Forks => Set<Fork>();
 
         public GitInsightContext(DbContextOptions<GitInsightContext> options)
             : base(options)

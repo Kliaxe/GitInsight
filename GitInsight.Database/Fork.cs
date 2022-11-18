@@ -11,7 +11,6 @@ namespace GitInsight.Database
         public int Id { get; set; }
         public string Name { get; set; }
         public int GitRepoId { get; set; }
-        public int? ParentId { get; set; }
         public Fork? Parent { get; set; }
         public ICollection<Fork> Children { get; set; }
     }
