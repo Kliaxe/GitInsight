@@ -2,6 +2,7 @@ using GitInsight.Infrastructure;
 using GitInsight.Database;
 using LibGit2Sharp;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace GitInsight.WebApp.Server.Controllers
 {
@@ -18,12 +19,12 @@ namespace GitInsight.WebApp.Server.Controllers
         }
 
         [HttpGet("{owner}/{repositoryName}")]
-        public async Task<ActionResult<RepoAnalysis>> Get(string owner, string repositoryName)
+        public async Task<Results<Ok<RepoAnalysis>, NotFound<string>>> Get(string owner, string repositoryName)
         {
             var (repo, exists) = GetLocalRepository(owner, repositoryName);
             if (!exists)
             {
-                return NotFound();
+                return TypedResults.NotFound(GitHubUrl(owner, repositoryName));
             }
             IGitRepoInsight repoInsight = GetRepoInsight(repo);
 
@@ -31,7 +32,7 @@ namespace GitInsight.WebApp.Server.Controllers
             var userDateCounts = repoInsight.GetCommitHistoryByUser().Select(t => new UserDateCounts(t.Item1, t.Item2));
             var forks = (await repoInsight.GetForks());
 
-            return new RepoAnalysis(dateCounts, userDateCounts, forks);
+            return TypedResults.Ok(new RepoAnalysis(dateCounts, userDateCounts, forks));
         }
 
         private (IRepository, bool) GetLocalRepository(string owner, string repositoryName)
@@ -42,7 +43,7 @@ namespace GitInsight.WebApp.Server.Controllers
             if (!Repository.IsValid(path))
             {
                 Directory.CreateDirectory(path);
-                string remoteUrl = $"https://github.com/{owner}/{repositoryName}";
+                string remoteUrl = GitHubUrl(owner, repositoryName);
                 try
                 {
                     Repository.Clone(remoteUrl, path, new CloneOptions());
@@ -76,5 +77,7 @@ namespace GitInsight.WebApp.Server.Controllers
                 return new GitRepoInsight(repo, GitHubClient.Client);
             }
         }
+
+        private string GitHubUrl(string owner, string repositoryName) => $"https://github.com/{owner}/{repositoryName}";
     }
 }
