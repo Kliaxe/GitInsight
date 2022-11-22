@@ -13,8 +13,8 @@
             builder.UseSqlite(connection);
             _context = new GitInsightContext(builder.Options);
             _context.Database.EnsureCreated();
-            GitRepo repo1 = new() { Name = "Repo 1", Url = "url1.com" };
-            GitRepo repo2 = new() { Name = "Repo 2", Url = "url2.com" };
+            GitRepo repo1 = new() { Name = "Repo 1", Url = "url1.com", Version = DateTime.Now };
+            GitRepo repo2 = new() { Name = "Repo 2", Url = "url2.com", Version = DateTime.Now };
             _context.Repositories.AddRange(repo1, repo2);
             _context.SaveChanges();
             UserDateCount u1 = new() { Count = 2, Date = DateTime.Now.Date, Email = "adrian@kari.dk", UserName = "Adrian", GitRepoId = repo1.Id };

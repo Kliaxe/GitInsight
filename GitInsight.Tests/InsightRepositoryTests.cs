@@ -42,7 +42,7 @@ namespace GitInsight.Tests
             version = DateTime.Now.AddDays(3);
 
             repo1 = new() { Name = "Repo 1", Url = "url1.com", Version = version };
-            repo2 = new() { Name = "Repo 2", Url = "url2.com" };
+            repo2 = new() { Name = "Repo 2", Url = "url2.com",  Version = version };
 
             u1 = new() { Count = 2, Date = DateTime.Now.Date, Email = "adrian@kari.dk", UserName = "Adrian", GitRepoId = 1 };
             u2 = new() { Count = 6, Date = DateTime.Now.Date.AddDays(2), Email = "mathias@gmail.com", UserName = "Darling", GitRepoId = 1 };
@@ -204,7 +204,7 @@ namespace GitInsight.Tests
             var repoInsight = CreateRepoInsightSubstitute();
             repoInsight.Name.Returns("New Repo");
             var userDateCounts = new List<UserDateCount>() { u1, u2, u3, u4, u5 };
-            f1.Children = new List<Fork> { f3 };
+            f1.Children.Add(f3);
             var forks = new List<Fork>() { f1, f2, f3 };
 
             await _repository.UpdateInsight(repoInsight);

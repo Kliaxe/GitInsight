@@ -51,12 +51,12 @@ else
 }
 
 @code {
-    private IEnumerable<UserDateCounts> UserDateCounts;
+    private IEnumerable<UserDateCounts>? UserDateCounts;
 
     protected override async Task OnInitializedAsync()
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-            UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).UserDateCounts; 
+            UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.UserDateCounts; 
         }
     }
 }

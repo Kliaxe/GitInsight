@@ -81,7 +81,7 @@ namespace GitInsight.Infrastructure
 
         private GitRepo AddNewInsight(ILocalGitRepoInsight repoInsight)
         {
-            var gitRepo = new GitRepo { Name = repoInsight.Name, Url = repoInsight.Url, Version = repoInsight.Version};
+            var gitRepo = new GitRepo { Name = repoInsight.Name, Url = repoInsight.Url, Version = repoInsight.Version };
             context.Repositories.Add(gitRepo);
             context.SaveChanges();
 
