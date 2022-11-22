@@ -9,9 +9,9 @@ namespace GitInsight.Database
     public class Fork
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int GitRepoId { get; set; }
+        public required string Name { get; init; }
+        public required int GitRepoId { get; init; }
         public Fork? Parent { get; set; }
-        public ICollection<Fork> Children { get; set; }
+        public ICollection<Fork> Children { get; } = new List<Fork>();
     }
 }
