@@ -38,16 +38,16 @@ else{
 
     class DataItem
     {
-        public string Date { get; set; }
+        public required string Date { get; set; }
         public double CommitCount { get; set; }
     }
 
-    private IEnumerable<DateCount> dateCounts;
+    private IEnumerable<DateCount>? dateCounts;
 
     protected override async Task OnInitializedAsync()
     {
         if(InputData.NameOfOwner is not null || InputData.NameOfRepository is not null){
-            dateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).DateCounts;
+            dateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.DateCounts;
             dataItems = dateCounts.Select(x => new DataItem() { CommitCount = x.Count, Date = x.Date.ToString("dd/MM/yyyy") }).Reverse();
         }
     }
