@@ -51,14 +51,14 @@ else
 }
 
 @code {
-	private IEnumerable<UserDateCounts> UserDateCounts;
+	private IEnumerable<UserDateCounts>? UserDateCounts;
 
 	bool showDataLabels = false;
 	bool smooth = false;
 
 	class DataItem
 	{
-		public string Date { get; set; }
+		public required string Date { get; set; }
 		public double CommitCount { get; set; }
 	}
 
@@ -66,7 +66,7 @@ else
 	{
 		if (InputData.NameOfOwner is not null || InputData.NameOfRepository is not null)
 		{
-			UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository)).UserDateCounts;
+			UserDateCounts = (await Http.GetFromJsonAsync<RepoAnalysis>("GitInsight/" + InputData.NameOfOwner + "/" + InputData.NameOfRepository))!.UserDateCounts;
 		}
 	}
 }
