@@ -10,14 +10,14 @@ namespace GitInsight.Client.Tests.Pages;
 public class CommitsTests
 {
     [Fact]
-    public void Test1()
+    public void Table_Should_Display_Commit_When_Input_Is_Change()
     {
         using TestContext context = new();
         var mock = context.Services.AddMockHttpClient();
-        mock.When("http://localhost/GitInsight/Lukski175/ChittyChat").RespondJson(() => new DateCount[]
+        mock.When("http://localhost/GitInsight/Lukski175/ChittyChat").RespondJson(() => new RepoAnalysis(new List<DateCount>() 
         {
             new(DateTime.Now, 2),
-        });
+        }, null!, null!));
 
         var OwnerName = "Lukski175";
         var RepoName = "ChittyChat";
@@ -35,20 +35,5 @@ public class CommitsTests
         var tds = commits.WaitForElements("td");
         tds[0].MarkupMatches($"<td>{DateTime.Now:dd/MM/yyyy}</td>");
         tds[1].MarkupMatches("<td>2</td>");
-    }
-
-    [Fact]
-    public void CounterShouldIncrementWhenSelected()
-    {
-        // Arrange
-        using var context = new TestContext();
-        var component = context.RenderComponent<Counter>();
-        var p = component.Find("p");
-
-        // Act
-        component.Find("button").Click();
-
-        // Assert
-        p.TextContent.MarkupMatches("Current count: 1");
     }
 }
