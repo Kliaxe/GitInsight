@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitInsight.Infrastructure
 {
-    public record DateCount(DateTimeOffset Date, int Count);
+    public record DateCount(DateTime Date, int Count);
     public record UserDateCounts(User User, IEnumerable<DateCount> DateCounts);
     public record User(string Name, string Email);
     public record ForkDTO(string Fullname, IEnumerable<ForkDTO> ChildForks);

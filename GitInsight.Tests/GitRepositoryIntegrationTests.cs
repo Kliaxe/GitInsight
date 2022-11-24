@@ -11,7 +11,6 @@ namespace GitInsight.Tests
 {
     public class GitRepositoryIntegrationTests : IClassFixture<DatabaseFixture>, IDisposable
     {
-        private IGitRepoInsight repoInsight;
         private readonly GitInsightContext _context;
         private IRepository repo;
 
@@ -25,26 +24,27 @@ namespace GitInsight.Tests
             _context.Database.EnsureCreated();
             _context.SaveChanges();
             repo = fixture.repo;
-            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
         }
 
         [Fact]
         public void GitRepoInsightTest()
         {
+            var repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
             var formatter = new Formatter(repoInsight);
             string expected = $"5 26/10/2022";
-            repoInsight.GetType().Should().Be(typeof(GitRepoInsight));
+            repoInsight.Should().BeAssignableTo<GitRepoInsight>();
             Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
         }
 
         [Fact]
-        public void DBRepoInsightTest()
+        public async Task DBRepoInsightTest()
         {
-            repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
-
+            GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
+            await GitInsightRepoFactory.datebaseUpdate;
+            var repoInsight = GitInsightRepoFactory.CreateRepoInsight(repo, _context, GitHubClient.Client);
             var formatter = new Formatter(repoInsight);
             string expected = $"5 26/10/2022";
-            repoInsight.GetType().Should().Be(typeof(DBRepoInsight));
+            repoInsight.Should().BeAssignableTo<DBRepoInsight>();
             Assert.Equal(expected, formatter.GetCommitsOverTimeFormatted());
         }
 

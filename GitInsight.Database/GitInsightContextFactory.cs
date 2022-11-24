@@ -10,9 +10,11 @@ namespace GitInsight.Database
         {
             var configuration = new ConfigurationBuilder().AddUserSecrets<GitInsightContextFactory>().Build();
             var connectionString = configuration.GetConnectionString("GitInsight");
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             var optionsBuilder = new DbContextOptionsBuilder<GitInsightContext>();
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseNpgsql(connectionString);
 
             return new GitInsightContext(optionsBuilder.Options);
         }

@@ -10,7 +10,7 @@ namespace GitInsight.Infrastructure
     {
         string Name { get; }
         string Url { get; }
-        DateTimeOffset Version { get; }
+        DateTime Version { get; }
         IEnumerable<DateCount> GetCommitHistory();
 
         IEnumerable<(User, IEnumerable<DateCount>)> GetCommitHistoryByUser();
