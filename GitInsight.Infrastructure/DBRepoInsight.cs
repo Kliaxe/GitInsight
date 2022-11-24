@@ -14,7 +14,7 @@ namespace GitInsight.Infrastructure
 
         public string Name => gitRepo.Name;
         public string Url => gitRepo.Url;
-        public DateTimeOffset Version => gitRepo.Version;
+        public DateTime Version => gitRepo.Version;
 
         public DBRepoInsight(GitRepo gitRepo)
         {

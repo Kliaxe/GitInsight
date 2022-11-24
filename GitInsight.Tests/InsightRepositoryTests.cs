@@ -13,7 +13,7 @@ namespace GitInsight.Tests
 
         private readonly GitRepo repo1;
         private readonly GitRepo repo2;
-        private readonly DateTimeOffset version;
+        private readonly DateTime version;
         private readonly Dictionary<User, List<DateCount>> dateCounts;
         private readonly List<ForkDTO> forks;
 
@@ -194,8 +194,8 @@ namespace GitInsight.Tests
             await _repository.UpdateInsight(repoInsight);
 
             var userDateCounts = repo1.UserDateCounts;
-            userDateCounts.Should().Contain(u => u.UserName == "Daniel" && u.Date == DateTime.Now.Date.AddDays(3) && u.Count == 10);
-            userDateCounts.Should().NotContain(u => u.UserName == "Daniel" && u.Date == DateTime.Now.Date.AddDays(3) && u.Count == 7);
+            userDateCounts.Should().Contain(u => u.UserName == "Daniel" && u.Date == DateTime.UtcNow.Date.AddDays(3) && u.Count == 10);
+            userDateCounts.Should().NotContain(u => u.UserName == "Daniel" && u.Date == DateTime.UtcNow.Date.AddDays(3) && u.Count == 7);
         }
 
         [Fact]
@@ -217,7 +217,7 @@ namespace GitInsight.Tests
 
         public void Dispose() => _context.Dispose();
 
-        private IRepository CreateIRepositorySubstitute(string url, DateTimeOffset latestCommit)
+        private IRepository CreateIRepositorySubstitute(string url, DateTime latestCommit)
         {
             var repo = Substitute.For<IRepository>();
             var network = Substitute.For<Network>();

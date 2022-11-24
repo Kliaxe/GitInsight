@@ -9,11 +9,11 @@ namespace GitInsight.Infrastructure;
 public class GitRepoInsight : ILocalGitRepoInsight
 {
     private readonly IRepository repo;
-    private Octokit.IGitHubClient client;
+    private readonly Octokit.IGitHubClient client;
 
     public string Name => repo.Name();
     public string Url => repo.Url();
-    public DateTimeOffset Version => repo.Version();
+    public DateTime Version => repo.Version();
 
     public GitRepoInsight(IRepository repo, Octokit.IGitHubClient client)
     {

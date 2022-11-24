@@ -85,7 +85,7 @@ namespace GitInsight.Server.Tests.Controllers
         {
             var result = await _controller.Get("Lukski175", "assignment-04");
             result.Result.Should().BeAssignableTo<Ok<RepoAnalysis>>();
-            var actual = (result.Result as Ok<RepoAnalysis>)!.Value;
+            RepoAnalysis actual = (result.Result as Ok<RepoAnalysis>)!.Value!;
             actual.DateCounts.Should().BeEquivalentTo(dateCounts);
             actual.UserDateCounts.Take(4).Should().BeEquivalentTo(userDateCounts);
         }

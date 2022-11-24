@@ -11,7 +11,7 @@ namespace GitInsight.Infrastructure
 {
     public class GitInsightRepoFactory
     {
-        
+        public static Task datebaseUpdate = Task.CompletedTask;
         public static IGitRepoInsight CreateRepoInsight(IRepository repo, GitInsightContext context, IGitHubClient client)
         {
             var insightRepository = new InsightRepository(context);
@@ -23,7 +23,7 @@ namespace GitInsight.Infrastructure
             else
             {
                 var localRepo = new GitRepoInsight(repo, client);
-                _ = insightRepository.UpdateInsight(localRepo);
+                datebaseUpdate = insightRepository.UpdateInsight(localRepo);
                 return localRepo;
             }
         }

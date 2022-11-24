@@ -66,7 +66,7 @@ namespace GitInsight.Infrastructure
                     if (date > databaseVersionDate) AddUserDateCount(gitRepo, user, dateCount);
                     else if (dateCount.Date == databaseVersionDate)
                     {
-                        var udc = context.UserDateCounts.First(udc => udc.Date == date & udc.Email == user.Email);
+                        var udc = context.UserDateCounts.FirstOrDefault(udc => udc.Date == date & udc.Email == user.Email);
                         if (udc != null)
                         {
                             udc.Count = dateCount.Count;
@@ -105,7 +105,7 @@ namespace GitInsight.Infrastructure
                 GitRepoId = gitRepo.Id,
                 UserName = user.Name,
                 Email = user.Email,
-                Date = dateCount.Date,
+                Date = DateTime.SpecifyKind(dateCount.Date, DateTimeKind.Unspecified),
                 Count = dateCount.Count
             };
             context.UserDateCounts.Add(udc);
